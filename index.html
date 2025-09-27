@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semantic Control</title>
+  <meta name="description" content="Semantic Control Website." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚪️</text></svg>">
+
+  <!-- Font: Roboto Slab -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0e0f12;
+      --text: #ffffff;
+      --muted: #b7c0cc;
+      --brand: #87d6ff;
+      --brand-2: #a7ffb7;
+      --card: #151821;
+      --border: #232736;
+      --maxw: 1024px;
+    }
+
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #ffffff;
+        --text: #0d1017;
+        --muted: #3b4756;
+        --brand: #005bff;
+        --brand-2: #00a86b;
+        --card: #f4f7fb;
+        --border: #e6ebf2;
+      }
+    }
+
+    *,*::before,*::after{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+
+    body{
+      margin: 0; 
+      --chosen-font: 'Roboto Slab';
+      font: 200 16px/1.6 var(--chosen-font), serif;
+      color: var(--text); 
+      background: radial-gradient(1200px 600px at 10% -10%, #1a1f2d 0%, transparent 60%), var(--bg);
+    }
+
+    img{ max-width: 100%; display: block; }
+    a{ color: inherit; text-decoration: none; }
+    p{ margin: 0 0 1rem; color: var(--muted); font-weight: 300; }
+
+    h1,h2,h3{ margin: 0 0 .6rem; line-height: 1.25; font-family: var(--chosen-font), serif; font-weight: 300; }
+
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 1rem; }
+
+    .site-header{
+      position: sticky; top: 0; z-index: 10; backdrop-filter: saturate(180%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav{ display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; }
+    .brand{ font-weight: 200; letter-spacing: .5px; font-family: var(--chosen-font), serif; }
+    .brand .dot{ color: var(--brand); }
+    .links{ display: flex; gap: 1rem; font-family: var(--chosen-font), serif; font-weight: 200; }
+    .links a{ opacity: .9; }
+    .links a:hover{ color: var(--brand); }
+
+    .hero{ padding: 0 0 2.5rem; position: relative; }
+    .banner{ aspect-ratio: 16/6; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: #0f1220; position: relative; }
+    .banner img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+    .banner .overlay-text{
+      position: absolute;
+      top: 20%;
+      left: 5%;
+      color: #ffffff;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 200;
+      text-align: left;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.7);
+      font-family: var(--chosen-font), serif;
+      letter-spacing: .5px;
+    }
+    .banner .placeholder{ color: var(--muted); font-size: .95rem; font-style: italic; }
+
+    .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
+    .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
+
+    .paper-card{ background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; display: grid; gap: .5rem; font-weight: 300; }
+    .paper-card h3{ font-weight: 400; }
+    .paper-card .figure-placeholder{ width: 100%; aspect-ratio: 16/9; background: var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: .9rem; font-style: italic; margin-bottom: .5rem; }
+
+    .tags{ display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag{ font-size: .8rem; padding: .2rem .5rem; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-weight: 300; }
+    .links-row{ display: flex; gap: .8rem; flex-wrap: wrap; font-weight: 300; }
+
+    section{ padding: 2.5rem 0; }
+    .grid{ display: grid; gap: 1.2rem; }
+    @media (min-width: 820px){ .grid.cols-3{ grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 720px){ .grid.cols-2{ grid-template-columns: repeat(2, 1fr); } }
+
+    .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; font-weight: 200; }
+    .site-footer a{ color: var(--brand); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a href="index.html" class="brand">Semantic Control<span class="dot">.</span></a>
+      <nav class="links" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="categories/index.html">Categories</a>
+        <a href="people/index.html">People</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home" class="wrap">
+    <section class="hero" aria-label="Site banner">
+      <div class="banner" role="img" aria-label="Top banner image">
+        <div class="placeholder">Banner image placeholder — drop your image in <code>assets/</code> and add an <code>&lt;img&gt;</code> here.</div>
+        <div class="overlay-text">Semantic Control</div>
+      </div>
+      <div class="intro">
+        <p class="subtitle">A simple Home with a banner and recent papers. Explore more via the Categories and People pages in the nav.</p>
+      </div>
+    </section>
+
+    <section id="papers" aria-label="Papers">
+      <div class="grid cols-3">
+        <article class="paper-card">
+          <div class="figure-placeholder">Figure Placeholder</div>
+          <h3>Paper Title One</h3>
+          <p class="meta">Venue ’25 · A. Author, B. Author</p>
+          <div class="tags">
+            <span class="tag">Swarm</span><span class="tag">Learning</span><span class="tag">Safety</span>
+          </div>
+          <p class="links-row"><a href="#">PDF</a> · <a href="#">Project</a> · <a href="#">Code</a></p>
+        </article>
+        <article class="paper-card">
+          <div class="figure-placeholder">Figure Placeholder</div>
+          <h3>Paper Title Two</h3>
+          <p class="meta">Journal ’24 · C. Author, D. Author</p>
+          <div class="tags">
+            <span class="tag">Planning</span><span class="tag">Control</span>
+          </div>
+          <p class="links-row"><a href="#">PDF</a> · <a href="#">Project</a> · <a href="#">Code</a></p>
+        </article>
+        <article class="paper-card">
+          <div class="figure-placeholder">Figure Placeholder</div>
+          <h3>Paper Title Three</h3>
+          <p class="meta">Conf ’24 · E. Author, F. Author</p>
+          <div class="tags">
+            <span class="tag">Robotics</span><span class="tag">HRI</span>
+          </div>
+          <p class="links-row"><a href="#">PDF</a> · <a href="#">Project</a> · <a href="#">Code</a></p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© <span id="year"></span> Semantic Control • Built with plain HTML & CSS</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
