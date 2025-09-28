@@ -1,9 +1,9 @@
 {
-    "title": "Paper Title One",
-    "venue": "Venue",
+    "title": "Semantically Safe Robot Manipulation: From Semantic Scene Understanding to Motion Safeguards",
+    "venue": "RA-L",
     "year": 2025,
-    "authors": ["A. Author", "B. Author"],
-    "tags": ["Swarm", "Learning", "Safety"],
+    "authors": ["Lukas Brunke", "Yanni Zhang", "Ralf Römer", "Jack Naimer", "Nikola Staykov", "Siqi Zhou", "Angela P. Schoellig"],
+    "tags": ["Manipulation", "Learning", "Semantic Safety"],
     "pdf": "#",
     "code": "#",
     "thumb": "projects/thumbs/paper-title-one.jpg",

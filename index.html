@@ -130,10 +130,11 @@
     .links-row{ display: flex; gap: .8rem; flex-wrap: wrap; font-weight: 300; }
 
     section{ padding: 2.5rem 0; }
-    .grid{ display: grid; gap: 1.2rem; }
-    @media (min-width: 1200px){ .grid.cols-4{ grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 900px){ .grid.cols-3{ grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 600px){ .grid.cols-2{ grid-template-columns: repeat(2, 1fr); } }
+    .grid{ 
+      display: grid; 
+      gap: 1.2rem; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
 
     .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; font-weight: 200; }
     .site-footer a{ color: var(--brand); }
@@ -172,7 +173,7 @@
     </section>
 
     <section id="papers" aria-label="Papers">
-       <div id="papers-grid" class="grid cols-4" role="list"></div>
+       <div id="papers-grid" class="grid" role="list"></div>
       <template id="paper-card-template">
         <article class="paper-card" role="listitem">
           <img class="thumb" alt="">
