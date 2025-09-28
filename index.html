@@ -15,11 +15,15 @@
       --bg: #0e0f12;
       --text: #ffffff;
       --muted: #b7c0cc;
-      --brand: #87d6ff;
+      --brand: #87d6ff;   /* light blue */
       --brand-2: #a7ffb7;
       --card: #151821;
       --border: #232736;
       --maxw: 1024px;
+
+      /* Animation speed controls */
+      --draw-duration: 12000ms;  /* slow overall draw (12s) */
+      --draw-stagger: 160ms;     /* delay between each stroke */
     }
 
     @media (prefers-color-scheme: light){
@@ -27,7 +31,7 @@
         --bg: #ffffff;
         --text: #0d1017;
         --muted: #3b4756;
-        --brand: #005bff;
+        --brand: #87d6ff;   /* keep light blue in light mode as well */
         --brand-2: #00a86b;
         --card: #f4f7fb;
         --border: #e6ebf2;
@@ -73,12 +77,36 @@
       position: relative;
       background: #ffffff;
     }
-    .banner img{
+    /* Base image fills banner */
+    .banner .banner-img{
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      z-index: 0;
+    }
+    /* Gradient sits above image but below SVG + text */
+    .banner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 50%;
+      background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Animated SVG overlay */
+    .banner svg{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       display: block;
+      z-index: 2;
+      pointer-events: none; /* allow clicks to pass through */
     }
     .banner .overlay-text{
       position: absolute;
@@ -90,7 +118,7 @@
       text-align: left;
       font-family: var(--chosen-font), serif;
       letter-spacing: .5px;
-      z-index: 2;
+      z-index: 3;
     }
     .banner .overlay-subtitle{
       position: absolute;
@@ -101,23 +129,14 @@
       font-weight: 200;
       text-align: left;
       font-family: var(--chosen-font), serif;
-      z-index: 2;
+      z-index: 3;
     }
     @media (max-width: 768px) {
       .banner .overlay-subtitle{
         top: calc(60% + 3rem);
       }
     }
-    .banner::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 50%;
-      background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
-      pointer-events: none;
-    }
+
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
     .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
 
@@ -126,8 +145,8 @@
     .paper-card .figure-placeholder{ width: 100%; aspect-ratio: 1/1; background: #e8e8e8; display: flex; align-items: center; justify-content: center; color: #888888; font-size: .9rem; font-style: italic; margin-bottom: .5rem; }
 
     .tags{ display: flex; flex-wrap: wrap; gap: .4rem; }
-    .tag{ font-size: .8rem; padding: .2rem .5rem; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-weight: 300; }
-    .links-row{ display: flex; gap: .8rem; flex-wrap: wrap; font-weight: 300; }
+    .tag{ font-size: .8rem; padding: .2rem .5rem; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); }
+    .links-row{ display: flex; gap: .8rem; flex-wrap: wrap; }
 
     section{ padding: 2.5rem 0; }
     .grid{ 
@@ -136,7 +155,7 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 
-    .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; font-weight: 200; }
+    .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; }
     .site-footer a{ color: var(--brand); }
 
     /* Thumbnail rule */
@@ -147,6 +166,32 @@
       background: #e8e8e8;
       margin-bottom: .5rem;
       display: block;
+    }
+
+    /* --- Line-art draw animation (banner.svg) --- */
+
+    /* Animate ALL stroke-capable elements */
+    .draw .svg-draw-stroke{
+      stroke: var(--brand);
+      stroke-width: 1.25;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      /* length normalization */
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+
+      animation: banner-draw var(--draw-duration) cubic-bezier(.33,0,.17,1) forwards;
+      animation-play-state: paused;
+      will-change: stroke-dashoffset;
+    }
+    .draw.inview .svg-draw-stroke { animation-play-state: running; }
+
+    @keyframes banner-draw { to { stroke-dashoffset: 0; } }
+
+    @media (prefers-reduced-motion: reduce){
+      .draw .svg-draw-stroke{ animation: none; stroke-dashoffset: 0; }
     }
   </style>
 </head>
@@ -164,8 +209,11 @@
 
   <main id="home" class="wrap">
     <section class="hero" aria-label="Site banner">
-      <div class="banner" role="img" aria-label="Top banner image">
-        <img src="assets/images/banner.jpg" alt="Semantic Control Banner" />
+      <div class="banner" role="img" aria-label="Line art banner">
+        <!-- Base image -->
+        <img class="banner-img" src="assets/images/banner.jpg" alt="Semantic Control Banner">
+
+        <!-- SVG injected by JS (traces over image) -->
         <div class="overlay-text">semantic control</div>
         <div class="overlay-subtitle">perceive and act through robots' lenses</div>
       </div>
@@ -284,6 +332,83 @@
       grid.insertAdjacentHTML('beforebegin',
         `<p class="intro">Could not load projects. Please check <code>projects/manifest.json</code> and JSON files.</p>`
       );
+    }
+  })();
+  </script>
+
+  <!-- Inject and animate banner.svg OVER the JPEG -->
+  <script>
+  (async function injectBannerSVG(){
+    const banner = document.querySelector('.banner');
+    if (!banner) return;
+
+    try{
+      const res = await fetch('assets/images/banner.svg');
+      if (!res.ok) throw new Error('Failed to load assets/images/banner.svg');
+
+      const svgText = await res.text();
+      const wrap = document.createElement('div');
+      wrap.innerHTML = svgText.trim();
+
+      const svg = wrap.querySelector('svg');
+      if (!svg) throw new Error('No <svg> root in banner.svg');
+
+      svg.classList.add('draw');
+      svg.setAttribute('role','img');
+      svg.setAttribute('aria-label','Decorative line art');
+
+      // Ensure overlay positioning/z-index are correct
+      svg.style.position = 'absolute';
+      svg.style.inset = '0';
+      svg.style.zIndex = '2';
+      svg.style.pointerEvents = 'none';
+
+      // Select ALL stroke-capable elements
+      const strokes = svg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
+
+      // Read CSS var for stagger (fallback 160ms)
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue('--draw-stagger').trim() || '160ms';
+      const step = parseFloat(raw) || 160;
+      const unit = raw.replace(/[0-9.\s]/g,'') || 'ms';
+
+      strokes.forEach((el, i) => {
+        if (el.hasAttribute('data-no-anim')) return;
+
+        // Remove inline dash attrs that can override our CSS
+        el.removeAttribute('stroke-dasharray');
+        el.removeAttribute('stroke-dashoffset');
+
+        // Normalize length to 1 so CSS 0..1 works consistently
+        el.setAttribute('pathLength','1');
+
+        // ensure it's styled/animated
+        el.classList.add('svg-draw-stroke');
+
+        // Slow cascade; comment out next line to draw all at once
+        el.style.animationDelay = (i * step) + unit;
+      });
+
+      // If your file uses <g> with stroke set on the group, force stroke color at root
+      svg.style.setProperty('--brand', '#87d6ff');
+
+      // Insert SVG above the image but below text (see z-indexes in CSS)
+      banner.prepend(svg);
+
+      // Start animation when in view (runs once)
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            svg.classList.add('inview');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.25 });
+      io.observe(svg);
+
+    } catch(err){
+      console.error(err);
+      // If SVG fails, we still keep the JPEG visible
     }
   })();
   </script>
