@@ -369,9 +369,9 @@
       // Filter out elements with data-no-anim
       const availableStrokes = Array.from(allStrokes).filter(el => !el.hasAttribute('data-no-anim'));
       
-      // Randomly select 50% of available strokes
+      // Randomly select 30% of available strokes
       const totalStrokes = availableStrokes.length;
-      const targetCount = Math.floor(totalStrokes * 0.50);
+      const targetCount = Math.floor(totalStrokes * 0.30);
       const selectedStrokes = availableStrokes
         .sort(() => Math.random() - 0.5) // Shuffle array
         .slice(0, targetCount); // Take first 80%
