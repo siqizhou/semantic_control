@@ -106,34 +106,34 @@
        height: 50%;
        background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
        pointer-events: none;
-       z-index: 3;
+       z-index: 5;
      }
-    .banner .overlay-text{
-      position: absolute;
-      top: 60%;
-      left: 5%;
-      color: #0e0e0e;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 300;
-      text-align: left;
-      font-family: var(--chosen-font), serif;
-      letter-spacing: .5px;
-      z-index: 3;
-    }
-    .banner .overlay-subtitle{
-      position: absolute;
-      top: calc(60% + 3.5rem);
-      left: 5%;
-      color: #0e0e0e;
-      font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-      font-weight: 200;
-      text-align: left;
-      font-family: var(--chosen-font), serif;
-      z-index: 3;
-    }
+      .banner .overlay-text{
+        position: absolute;
+        top: 80%;
+        left: 5%;
+        color: #0e0e0e;
+        font-size: clamp(1.8rem, 5vw, 2.8rem);
+        font-weight: 300;
+        text-align: left;
+        font-family: var(--chosen-font), serif;
+        letter-spacing: .5px;
+        z-index: 6;
+      }
+      .banner .overlay-subtitle{
+        position: absolute;
+        top: calc(80% + 3.5rem);
+        left: 5%;
+        color: #0e0e0e;
+        font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+        font-weight: 200;
+        text-align: left;
+        font-family: var(--chosen-font), serif;
+        z-index: 6;
+      }
     @media (max-width: 768px) {
       .banner .overlay-subtitle{
-        top: calc(60% + 2.5rem);
+        top: calc(80% + 2.5rem);
       }
     }
 
