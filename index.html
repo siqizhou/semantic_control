@@ -103,22 +103,20 @@
       font-family: var(--chosen-font), serif;
       z-index: 2;
     }
-    
     @media (max-width: 768px) {
       .banner .overlay-subtitle{
         top: calc(60% + 3rem);
       }
     }
-    .banner .placeholder{ color: var(--muted); font-size: .95rem; font-style: italic; }
     .banner::after {
       content: "";
       position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
-      height: 50%;  /* adjust how tall the fade is */
+      height: 50%;
       background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
-      pointer-events: none; /* lets clicks pass through */
+      pointer-events: none;
     }
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
     .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
@@ -138,6 +136,16 @@
 
     .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; font-weight: 200; }
     .site-footer a{ color: var(--brand); }
+
+    /* Thumbnail rule */
+    .paper-card .thumb{
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      background: #e8e8e8;
+      margin-bottom: .5rem;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -159,40 +167,20 @@
         <div class="overlay-text">semantic control</div>
         <div class="overlay-subtitle">perceive and act through robots' lenses</div>
       </div>
-      <div class="intro">
-      </div>
+      <div class="intro"></div>
     </section>
 
     <section id="papers" aria-label="Papers">
-      <div class="grid cols-3">
-        <article class="paper-card">
-          <div class="figure-placeholder">Figure Placeholder</div>
-          <h3>Paper Title One</h3>
-          <p class="meta">Venue ’25 · A. Author, B. Author</p>
-          <div class="tags">
-            <span class="tag">Swarm</span><span class="tag">Learning</span><span class="tag">Safety</span>
-          </div>
-          <p class="links-row"><a href="#">PDF</a> · <a href="#">Project</a> · <a href="#">Code</a></p>
+      <div id="papers-grid" class="grid cols-3" role="list"></div>
+      <template id="paper-card-template">
+        <article class="paper-card" role="listitem">
+          <img class="thumb" alt="">
+          <h3 class="title"></h3>
+          <p class="meta"></p>
+          <div class="tags"></div>
+          <p class="links-row"></p>
         </article>
-        <article class="paper-card">
-          <div class="figure-placeholder">Figure Placeholder</div>
-          <h3>Paper Title Two</h3>
-          <p class="meta">Journal ’24 · C. Author, D. Author</p>
-          <div class="tags">
-            <span class="tag">Planning</span><span class="tag">Control</span>
-          </div>
-          <p class="links-row"><a href="#">PDF</a> · <a href="#">Project</a> · <a href="#">Code</a></p>
-        </article>
-        <article class="paper-card">
-          <div class="figure-placeholder">Figure Placeholder</div>
-          <h3>Paper Title Three</h3>
-          <p class="meta">Conf ’24 · E. Author, F. Author</p>
-          <div class="tags">
-            <span class="tag">Robotics</span><span class="tag">HRI</span>
-          </div>
-          <p class="links-row"><a href="#">PDF</a> · <a href="#">Project</a> · <a href="#">Code</a></p>
-        </article>
-      </div>
+      </template>
     </section>
   </main>
 
@@ -204,6 +192,98 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  (async function loadPapers(){
+    const grid = document.getElementById('papers-grid');
+    const tpl  = document.getElementById('paper-card-template');
+
+    function addLinks(container, entries){
+      const items = Object.entries(entries).filter(([,url]) => !!url);
+      items.forEach(([label, url], i) => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.textContent = label;
+        a.target = "_blank";
+        a.rel = "noopener";
+        container.appendChild(a);
+        if (i < items.length - 1) container.append(" · ");
+      });
+    }
+
+    async function loadOne(filename){
+      const res = await fetch(`projects/${filename}`);
+      if (!res.ok) throw new Error(`Failed to load ${filename}`);
+      const data = await res.json();
+      data._file = filename;
+      return data;
+    }
+
+    try{
+      const manifestRes = await fetch('projects/manifest.json');
+      if (!manifestRes.ok) throw new Error('Failed to load projects/manifest.json');
+      const files = await manifestRes.json();
+
+      const projects = await Promise.all(files.map(loadOne));
+
+      projects.sort((a, b) =>
+        (b.order || 0) - (a.order || 0) ||
+        (b.year || 0) - (a.year || 0) ||
+        String(a.title).localeCompare(String(b.title))
+      );
+
+      for (const p of projects){
+        const node = tpl.content.cloneNode(true);
+        const card = node.querySelector('.paper-card');
+
+        // Thumbnail or placeholder
+        const img = node.querySelector('.thumb');
+        if (p.thumb){
+          img.src = p.thumb;
+          img.alt = `${p.title} figure`;
+        } else {
+          img.replaceWith(Object.assign(document.createElement('div'), {
+            className: 'figure-placeholder',
+            textContent: 'Figure Placeholder'
+          }));
+        }
+
+        // Title
+        node.querySelector('.title').textContent = p.title || 'Untitled';
+
+        // Meta
+        const yy = p.year ? String(p.year).slice(-2) : '';
+        const authors = Array.isArray(p.authors) ? p.authors.join(', ') : (p.authors || '');
+        node.querySelector('.meta').textContent =
+          [p.venue, yy ? `’${yy}` : ''].filter(Boolean).join(' ') +
+          (authors ? ` · ${authors}` : '');
+
+        // Tags
+        const tagsEl = node.querySelector('.tags');
+        (p.tags || []).forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'tag';
+          span.textContent = tag;
+          tagsEl.appendChild(span);
+        });
+
+        // Links
+        const linksEl = node.querySelector('.links-row');
+        addLinks(linksEl, {
+          PDF: p.pdf,
+          Code: p.code
+        });
+
+        grid.appendChild(card);
+      }
+    } catch(err){
+      console.error(err);
+      grid.insertAdjacentHTML('beforebegin',
+        `<p class="intro">Could not load projects. Please check <code>projects/manifest.json</code> and JSON files.</p>`
+      );
+    }
+  })();
   </script>
 </body>
 </html>

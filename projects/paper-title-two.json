@@ -1,0 +1,11 @@
+{
+    "title": "Paper Title Two",
+    "venue": "Venue",
+    "year": 2025,
+    "authors": ["A. Author", "B. Author"],
+    "tags": ["Swarm", "Learning", "Safety"],
+    "pdf": "#",
+    "code": "#",
+    "thumb": "projects/thumbs/paper-title-two.jpg",
+    "order": 100
+  }
