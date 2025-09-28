@@ -81,13 +81,25 @@
     }
     .banner .overlay-subtitle{
       position: absolute;
-      top: 35%;
+      top: 40%;
       left: 5%;
       color: #666666;
       font-size: clamp(0.8rem, 2.5vw, 1.1rem);
       font-weight: 200;
       text-align: left;
       font-family: var(--chosen-font), serif;
+    }
+    
+    @media (max-width: 768px) {
+      .banner .overlay-subtitle{
+        top: 50%;
+      }
+    }
+    
+    @media (min-width: 769px) {
+      .banner .overlay-subtitle{
+        top: 35%;
+      }
     }
     .banner .placeholder{ color: var(--muted); font-size: .95rem; font-style: italic; }
 
