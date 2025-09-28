@@ -15,7 +15,7 @@
       --bg: #0e0f12;
       --text: #ffffff;
       --muted: #b7c0cc;
-      --brand: #87d6ff;   /* light blue */
+      --brand: #cbe9f9;   /* light blue */
       --brand-2: #a7ffb7;
       --card: #151821;
       --border: #232736;
@@ -77,37 +77,37 @@
       position: relative;
       background: #ffffff;
     }
-    /* Base image fills banner */
-    .banner .banner-img{
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    }
-    /* Gradient sits above image but below SVG + text */
-    .banner::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 50%;
-      background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
-      pointer-events: none;
-      z-index: 1;
-    }
-    /* Animated SVG overlay */
-    .banner svg{
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-      z-index: 2;
-      pointer-events: none; /* allow clicks to pass through */
-    }
+     /* Base image fills banner */
+     .banner .banner-img{
+       position: absolute;
+       inset: 0;
+       width: 100%;
+       height: 100%;
+       object-fit: cover;
+       z-index: 1;
+     }
+     /* Animated SVG overlay */
+     .banner svg{
+       position: absolute;
+       inset: 0;
+       width: 100%;
+       height: 100%;
+       display: block;
+       z-index: 2;
+       pointer-events: none; /* allow clicks to pass through */
+     }
+     /* Gradient sits above SVG but below text */
+     .banner::after {
+       content: "";
+       position: absolute;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       height: 50%;
+       background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
+       pointer-events: none;
+       z-index: 3;
+     }
     .banner .overlay-text{
       position: absolute;
       top: 60%;
@@ -173,7 +173,7 @@
     /* Animate ALL stroke-capable elements */
     .draw .svg-draw-stroke{
       stroke: var(--brand);
-      stroke-width: 1.25;
+      stroke-width: 1.0;
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
@@ -357,11 +357,11 @@
       svg.setAttribute('role','img');
       svg.setAttribute('aria-label','Decorative line art');
 
-      // Ensure overlay positioning/z-index are correct
-      svg.style.position = 'absolute';
-      svg.style.inset = '0';
-      svg.style.zIndex = '2';
-      svg.style.pointerEvents = 'none';
+       // Ensure overlay positioning/z-index are correct
+       svg.style.position = 'absolute';
+       svg.style.inset = '0';
+       svg.style.zIndex = '2';
+       svg.style.pointerEvents = 'none';
 
       // Select ALL stroke-capable elements
       const strokes = svg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
