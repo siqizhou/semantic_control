@@ -399,9 +399,6 @@
         el.style.animationDelay = (i * step) + unit;
       });
 
-      // If your file uses <g> with stroke set on the group, force stroke color at root
-      svg.style.setProperty('--brand', '#87d6ff');
-
       // Insert SVG above the image but below text (see z-indexes in CSS)
       banner.prepend(svg);
 
