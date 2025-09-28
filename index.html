@@ -66,11 +66,24 @@
     .links a:hover{ color: var(--brand); }
 
     .hero{ padding: 0 0 2.5rem; position: relative; }
-    .banner{ aspect-ratio: 16/8; width: 100%; border-radius: 16px; overflow: hidden; background: #0f1220; position: relative; }
-    .banner img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+    .banner{
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #0f1220;
+    }
+    .banner img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
     .banner .overlay-text{
       position: absolute;
-      top: 23%;
+      top: 60%;
       left: 5%;
       color: #333333;
       font-size: clamp(1.8rem, 5vw, 2.8rem);
@@ -78,31 +91,36 @@
       text-align: left;
       font-family: var(--chosen-font), serif;
       letter-spacing: .5px;
+      z-index: 2;
     }
     .banner .overlay-subtitle{
       position: absolute;
-      top: 40%;
+      top: 68%;
       left: 5%;
-      color: #666666;
+      color: #333333;
       font-size: clamp(0.8rem, 2.5vw, 1.1rem);
       font-weight: 200;
       text-align: left;
       font-family: var(--chosen-font), serif;
+      z-index: 2;
     }
     
     @media (max-width: 768px) {
       .banner .overlay-subtitle{
-        top: 45%;
-      }
-    }
-    
-    @media (min-width: 769px) {
-      .banner .overlay-subtitle{
-        top: 35%;
+        top: 68%;
       }
     }
     .banner .placeholder{ color: var(--muted); font-size: .95rem; font-style: italic; }
-
+    .banner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 50%;  /* adjust how tall the fade is */
+      background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
+      pointer-events: none; /* lets clicks pass through */
+    }
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
     .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
 
