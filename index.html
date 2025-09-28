@@ -364,7 +364,19 @@
        svg.style.pointerEvents = 'none';
 
       // Select ALL stroke-capable elements
-      const strokes = svg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
+      const allStrokes = svg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
+      
+      // Filter out elements with data-no-anim
+      const availableStrokes = Array.from(allStrokes).filter(el => !el.hasAttribute('data-no-anim'));
+      
+      // Randomly select 90% of available strokes
+      const totalStrokes = availableStrokes.length;
+      const targetCount = Math.floor(totalStrokes * 0.9);
+      const selectedStrokes = availableStrokes
+        .sort(() => Math.random() - 0.5) // Shuffle array
+        .slice(0, targetCount); // Take first 80%
+
+      console.log(`Total strokes: ${totalStrokes}, Selected for animation: ${targetCount}`);
 
       // Read CSS var for stagger (fallback 160ms)
       const raw = getComputedStyle(document.documentElement)
@@ -372,9 +384,7 @@
       const step = parseFloat(raw) || 160;
       const unit = raw.replace(/[0-9.\s]/g,'') || 'ms';
 
-      strokes.forEach((el, i) => {
-        if (el.hasAttribute('data-no-anim')) return;
-
+      selectedStrokes.forEach((el, i) => {
         // Remove inline dash attrs that can override our CSS
         el.removeAttribute('stroke-dasharray');
         el.removeAttribute('stroke-dashoffset');
