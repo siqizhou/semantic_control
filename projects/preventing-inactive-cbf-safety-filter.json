@@ -7,7 +7,7 @@
     "tags": ["Safe Control", "Theoric Tools"],
     "pdf": "https://arxiv.org/pdf/2409.11171",
     "website": "#",
-    "code": "#",
+    "code": "https://github.com/lukasbrunke/multi-cbf",
     "doi": "10.1109/TAC.2025.3608258",
     "thumb": "projects/thumbs/paper-title-one.jpg",
     "order": 100
