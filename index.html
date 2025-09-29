@@ -209,6 +209,7 @@
       gap: 1.2rem;
       justify-content: center;
       align-items: flex-start;
+      flex-wrap: wrap;
     }
     
     .grid-column{
@@ -216,6 +217,25 @@
       flex-direction: column;
       gap: 1.2rem;
       width: 280px;
+      flex-shrink: 0;
+    }
+    
+    /* Responsive column adjustments */
+    @media (max-width: 920px) {
+      .grid {
+        flex-direction: column;
+        align-items: center;
+      }
+      .grid-column {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+    
+    @media (min-width: 921px) and (max-width: 1200px) {
+      .grid-column {
+        width: 280px;
+      }
     }
     
     .grid .paper-card{
@@ -400,8 +420,15 @@
         tagFilterContainer.appendChild(button);
       });
 
-      // Create columns (assuming 3 columns for desktop)
-      const numColumns = 3;
+      // Create columns based on screen width
+      function getNumColumns() {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 920) return 1;      // Mobile: single column
+        if (screenWidth <= 1200) return 2;     // Tablet: two columns
+        return 3;                              // Desktop: three columns
+      }
+      
+      const numColumns = getNumColumns();
       const columns = [];
       for (let i = 0; i < numColumns; i++) {
         const column = document.createElement('div');
@@ -507,6 +534,33 @@
           const selectedTag = btn.getAttribute('data-tag');
           filterPapers(selectedTag, projects, columns, allCards);
         });
+      });
+
+      // Handle window resize to adjust columns
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const newNumColumns = getNumColumns();
+          if (newNumColumns !== numColumns) {
+            // Clear existing columns
+            grid.innerHTML = '';
+            
+            // Create new columns
+            const newColumns = [];
+            for (let i = 0; i < newNumColumns; i++) {
+              const column = document.createElement('div');
+              column.className = 'grid-column';
+              grid.appendChild(column);
+              newColumns.push(column);
+            }
+            
+            // Re-distribute all cards to new columns
+            const activeButton = document.querySelector('.tag-filter-btn.active');
+            const selectedTag = activeButton ? activeButton.getAttribute('data-tag') : 'all';
+            filterPapers(selectedTag, projects, newColumns, allCards);
+          }
+        }, 250); // Debounce resize events
       });
     } catch(err){
       console.error(err);
