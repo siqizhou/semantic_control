@@ -400,33 +400,52 @@
           return (b.order || 0) - (a.order || 0);
         }
         
-        // Then sort by venue type (journal papers first)
-        const getVenueType = (venue) => {
-          if (!venue) return 3; // Unknown venues last
+        // Then sort by venue type with preferred order
+        const getVenuePriority = (venue) => {
+          if (!venue) return 999; // Unknown venues last
           const venueLower = venue.toLowerCase();
-          // Journal venues
-          if (venueLower.includes('ra-l') || venueLower.includes('t-ro') || 
-              venueLower.includes('ijrr') || venueLower.includes('tac') || venueLower.includes('automatica') ||
-              venueLower.includes('ieee transactions') || venueLower.includes('journal')) {
-            return 0; // Journals first
+          
+          // Define preferred venue order (lower number = higher priority)
+          const venuePriorities = {
+            // Top-tier journals
+            'ijrr': 1,
+            't-ro': 2,
+            'ra-l': 3,
+            'tac': 4,
+            'automatica': 5,
+            'ieee transactions': 6,
+            'journal': 7,
+            
+            // Top-tier conferences
+            'rss': 10,
+            'icra': 11,
+            'iros': 12,
+            'corl': 13,
+            'conference': 14,
+            'symposium': 15,
+            
+            // Preprints
+            'preprint': 20,
+            'arxiv': 21,
+            
+            // Other venues
+            'venue': 30
+          };
+          
+          // Check for exact matches first
+          for (const [key, priority] of Object.entries(venuePriorities)) {
+            if (venueLower.includes(key)) {
+              return priority;
+            }
           }
-          // Conference venues
-          if (venueLower.includes('icra') || venueLower.includes('iros') || 
-              venueLower.includes('rss') || venueLower.includes('cora') ||
-              venueLower.includes('conference') || venueLower.includes('symposium')) {
-            return 1; // Conferences second
-          }
-          // Preprints and others
-          if (venueLower.includes('preprint') || venueLower.includes('arxiv')) {
-            return 2; // Preprints third
-          }
-          return 3; // Unknown venues last
+          
+          return 999; // Unknown venues last
         };
         
-        const venueTypeA = getVenueType(a.venue);
-        const venueTypeB = getVenueType(b.venue);
-        if (venueTypeA !== venueTypeB) {
-          return venueTypeA - venueTypeB;
+        const venuePriorityA = getVenuePriority(a.venue);
+        const venuePriorityB = getVenuePriority(b.venue);
+        if (venuePriorityA !== venuePriorityB) {
+          return venuePriorityA - venuePriorityB;
         }
         
         // Then sort by year (newest first)
