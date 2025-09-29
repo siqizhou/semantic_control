@@ -147,6 +147,25 @@
     .tags{ display: flex; flex-wrap: wrap; gap: .4rem; }
     .tag{ font-size: .8rem; padding: .2rem .5rem; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); }
     .links-row{ display: flex; gap: .8rem; flex-wrap: wrap; }
+    
+    .abstract-toggle{ 
+      background: var(--brand); 
+      color: var(--bg); 
+      border: none; 
+      padding: .4rem .8rem; 
+      border-radius: 4px; 
+      font-size: .8rem; 
+      cursor: pointer; 
+      margin-top: .5rem;
+      font-family: var(--chosen-font), serif;
+    }
+    .abstract-toggle:hover{ opacity: 0.8; }
+    .abstract{ 
+      margin-top: .5rem; 
+      font-size: .85rem; 
+      line-height: 1.4; 
+      color: var(--muted);
+    }
 
     section{ padding: 2.5rem 0; }
     .grid{ 
@@ -236,6 +255,8 @@
           <p class="meta"></p>
           <div class="tags"></div>
           <p class="links-row"></p>
+          <button class="abstract-toggle" style="display: none;">Show Abstract</button>
+          <div class="abstract" style="display: none;"></div>
         </article>
       </template>
     </section>
@@ -257,7 +278,7 @@
     const tpl  = document.getElementById('paper-card-template');
 
     function addLinks(container, entries){
-      const items = Object.entries(entries).filter(([,url]) => !!url);
+      const items = Object.entries(entries).filter(([,url]) => url && url !== '' && url !== '#');
       items.forEach(([label, url], i) => {
         const a = document.createElement('a');
         a.href = url;
@@ -329,8 +350,29 @@
         const linksEl = node.querySelector('.links-row');
         addLinks(linksEl, {
           PDF: p.pdf,
+          Website: p.website,
           Code: p.code
         });
+
+        // Abstract toggle
+        const abstractToggle = node.querySelector('.abstract-toggle');
+        const abstractDiv = node.querySelector('.abstract');
+        
+        if (p.abstract) {
+          abstractToggle.style.display = 'block';
+          abstractDiv.textContent = p.abstract;
+          
+          abstractToggle.addEventListener('click', () => {
+            const isVisible = abstractDiv.style.display !== 'none';
+            if (isVisible) {
+              abstractDiv.style.display = 'none';
+              abstractToggle.textContent = 'Show Abstract';
+            } else {
+              abstractDiv.style.display = 'block';
+              abstractToggle.textContent = 'Hide Abstract';
+            }
+          });
+        }
 
         grid.appendChild(card);
       }

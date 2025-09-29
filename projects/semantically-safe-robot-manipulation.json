@@ -1,10 +1,12 @@
 {
     "title": "Semantically Safe Robot Manipulation: From Semantic Scene Understanding to Motion Safeguards",
+    "abstract": "Ensuring safe interactions in human-centric environments requires robots to understand and adhere to constraints recognized by humans as “common sense” (e.g., “moving a cup of water above a laptop is unsafe as the water may spill” or “rotating a cup of water is unsafe as it can lead to pouring its content”). Recent advances in computer vision and machine learning have enabled robots to acquire a semantic understanding of and reason about their operating environments. While extensive literature on safe robot decision-making exists, semantic understanding is rarely integrated into these formulations. In this work, we propose a semantic safety filter framework to certify robot inputs with respect to semantically defined constraints (e.g., unsafe spatial relationships, behaviors, and poses) and geometrically defined constraints (e.g., environment-collision and self-collision constraints). In our proposed approach, given perception inputs, we build a semantic map of the 3D environment and leverage the contextual reasoning capabilities of large language models to infer semantically unsafe conditions. These semantically unsafe conditions are then mapped to safe actions through a control barrier certification formulation. We demonstrate the proposed semantic safety filter in teleoperated manipulation tasks and with learned diffusion policies applied in a real-world kitchen environment that further showcases its effectiveness in addressing practical semantic safety constraints. Together, these experiments highlight our approach’s capability to integrate semantics into safety certification, enabling safe robot operation beyond traditional collision avoidance.",
     "venue": "RA-L",
     "year": 2025,
     "authors": ["Lukas Brunke", "Yanni Zhang", "Ralf Römer", "Jack Naimer", "Nikola Staykov", "Siqi Zhou", "Angela P. Schoellig"],
     "tags": ["Manipulation", "Learning", "Semantic Safety"],
-    "pdf": "#",
+    "pdf": "https://arxiv.org/pdf/2410.15185",
+    "website": "https://utiasdsl.github.io/semantic-manipulation/",
     "code": "#",
     "thumb": "projects/thumbs/paper-title-one.jpg",
     "order": 100
