@@ -348,11 +348,18 @@
 
         // Links
         const linksEl = node.querySelector('.links-row');
-        addLinks(linksEl, {
+        const linkEntries = {
           PDF: p.pdf,
           Website: p.website,
           Code: p.code
-        });
+        };
+        
+        // Add DOI if available
+        if (p.doi) {
+          linkEntries.DOI = `https://doi.org/${p.doi}`;
+        }
+        
+        addLinks(linksEl, linkEntries);
 
         // Abstract toggle
         const abstractToggle = node.querySelector('.abstract-toggle');
