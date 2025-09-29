@@ -1,0 +1,14 @@
+{
+    "title": "Where Did I Leave My Glasses? Open-Vocabulary Semantic Exploration in Real-World Semi-Static Environments",
+    "abstract": "Robots deployed in real-world environments, such as homes, must not only navigate safely but also understand their surroundings and adapt to environment changes. To perform tasks efficiently, they must build and maintain a semantic map that accurately reflects the current state of the environment. Existing research on semantic exploration largely focuses on static scenes without persistent object-level instance tracking. A consistent map is, however, crucial for real-world robotic applications where objects in the environment can be removed, reintroduced, or shifted over time. In this work, to close this gap, we propose an open-vocabulary, semantic exploration system for semi-static environments. Our system maintains a consistent map by building a probabilistic model of object instance stationarity, systematically tracking semi-static changes, and actively exploring areas that have not been visited for a prolonged period of time. In addition to active map maintenance, our approach leverages the map's semantic richness with LLM-based reasoning for open-vocabulary object-goal navigation. This enables the robot to search more efficiently by prioritizing contextually relevant areas. We evaluate our approach across multiple real-world semi-static environments. Our system detects 95% of map changes on average, improving efficiency by more than 29% as compared to random and patrol baselines. Overall, our approach achieves a mapping precision within 2% of a fully rebuilt map while requiring substantially less exploration and further completes object goal navigation tasks about 14% faster than the next-best tested strategy (coverage patrolling). A video of our work can be found at <a href=\"http://tiny.cc/sem-explor-semi-static\">http://tiny.cc/sem-explor-semi-static</a>.",
+    "venue": "Preprint",
+    "year": 2025,
+    "authors": ["Benjamin Bogenberger", "Oliver Harrison", "Orrin Dahanaggamaarachchi", "Lukas Brunke", "Jingxing Qian",
+    "Siqi Zhou", "Angela P. Schoellig"],
+    "tags": ["Mobile Manipulator", "Semantic Exploration", "Safe Control"],
+    "pdf": "https://arxiv.org/pdf/2509.19851",
+    "website": "#",
+    "code": "#",
+    "thumb": "projects/thumbs/paper-title-two.jpg",
+    "order": 100
+  }
