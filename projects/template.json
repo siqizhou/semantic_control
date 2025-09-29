@@ -1,0 +1,14 @@
+{
+    "title": "Title",
+    "abstract": "Abstract",
+    "venue": "Venue",
+    "year": 2025,
+    "authors": ["Authors"],
+    "tags": ["Tags"],
+    "pdf": "#",
+    "website": "#",
+    "code": "#",
+    "doi": "#",
+    "thumb": "projects/thumbs/figure-placeholder.svg",
+    "order": 100
+  }

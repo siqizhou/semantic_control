@@ -3,5 +3,6 @@
     "closing-perception-action-loop.json",
     "where-did-i-leave-my-glasses.json",
     "preventing-inactive-cbf-safety-filter.json",
-    "control-barrier-aided-teleoperation.json"
+    "control-barrier-aided-teleoperation.json",
+    "hierarchical-task-mpc.json"
   ]  

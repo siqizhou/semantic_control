@@ -1,0 +1,14 @@
+{
+    "title": "Hierarchical Task Model Predictive Control for Sequential Mobile Manipulation Tasks",
+    "abstract": "Mobile manipulators are envisioned to serve more complex roles in people's everyday lives. With recent breakthroughs in large language models, task planners have become better at translating human verbal instructions into a sequence of tasks. However, there is still a need for a decision-making algorithm that can seamlessly interface with the high-level task planner to carry out the sequence of tasks efficiently. In this work, building on the idea of nonlinear lexicographic optimization, we propose a novel Hierarchical-Task Model Predictive Control framework that is able to complete sequential tasks with improved performance and reactivity by effectively leveraging the robot's redundancy. Compared to the state-of-the-art task-prioritized inverse kinematic control method, our approach has improved hierarchical trajectory tracking performance by 42% on average when facing task changes, robot singularity, and reference variations. Compared to a typical single-task architecture, our proposed hierarchical task control architecture enables the robot to traverse a shorter path in task space and achieves an execution time 2.3 times faster when executing a sequence of delivery tasks. We demonstrated the results with real-world experiments on a 9 degrees of freedom mobile manipulator.",
+    "venue": "RA-L",
+    "year": 2024,
+    "authors": ["Xintong Du", "Siqi Zhou", "Angela P. Schoellig"],
+    "tags": ["Mobile Manipulator", "Safe Control", "Theoretic Tools"],
+    "pdf": "#",
+    "website": "https://tracy-du.notion.site/Hierarchical-Task-Model-Predictive-Control-for-Sequential-Mobile-Manipulation-Tasks-ced3e8d041774bc1b327ea3fc234e7a4?pvs=4",
+    "code": "#",
+    "doi": "10.1109/LRA.2023.3342671",
+    "thumb": "projects/thumbs/figure-placeholder.svg",
+    "order": 100
+  }
