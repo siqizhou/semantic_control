@@ -1,5 +1,5 @@
 {
-    "title": "Preventing Inactive CBF Safety Filters Caused by Invalid Relative Degree Assumptions",
+    "title": "Preventing Inactive CBF Safety Filters Caused by Incorrect Relative Degree Assumptions",
     "abstract": "Control barrier function (CBF) safety filters emerged as a popular framework to certify and modify potentially unsafe control inputs, for example, provided by a reinforcement learning agent or a non-expert user. Typical CBF safety filter designs assume that the system has a uniform relative degree. This assumption is restrictive and is frequently overlooked in practice. When violated, the assumption can cause the safety filter to become inactive, allowing large and possibly unsafe control inputs to be applied to the system. In discrete-time implementations, the inactivity issue is often manifested as chattering close to the safety boundary and/or constraint violations. In this work, we provide an in-depth discussion on the safety filter inactivity issue, propose a mitigation strategy based on multiple CBFs, and derive an upper bound on the sampling time for safety under sampled-data control. The effectiveness of our proposed method is validated through both simulation and quadrotor experiments.",
     "venue": "TAC",
     "year": 2025,
