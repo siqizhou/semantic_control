@@ -164,15 +164,24 @@
     }
 
     section{ padding: 2.5rem 0; }
-    .grid{ 
-      display: grid; 
-      gap: 1.2rem; 
-      grid-template-columns: repeat(auto-fit, 280px);
+    .grid{
+      display: flex;
+      gap: 1.2rem;
       justify-content: center;
-      align-items: start;
+      align-items: flex-start;
+    }
+    
+    .grid-column{
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      width: 280px;
+    }
+    
+    .grid .paper-card{
+      width: 100%;
     }
     .paper-card {
-      width: 280px;
       min-height: 0;
     }
 
@@ -307,7 +316,18 @@
         String(a.title).localeCompare(String(b.title))
       );
 
-      for (const p of projects){
+      // Create columns (assuming 3 columns for desktop)
+      const numColumns = 3;
+      const columns = [];
+      for (let i = 0; i < numColumns; i++) {
+        const column = document.createElement('div');
+        column.className = 'grid-column';
+        grid.appendChild(column);
+        columns.push(column);
+      }
+
+      for (let i = 0; i < projects.length; i++){
+        const p = projects[i];
         const node = tpl.content.cloneNode(true);
         const card = node.querySelector('.paper-card');
 
@@ -330,7 +350,7 @@
         const yy = p.year ? String(p.year).slice(-2) : '';
         const authors = Array.isArray(p.authors) ? p.authors.join(', ') : (p.authors || '');
         node.querySelector('.meta').textContent =
-          [p.venue, yy ? `’${yy}` : ''].filter(Boolean).join(' ') +
+          [p.venue, yy ? `'${yy}` : ''].filter(Boolean).join(' ') +
           (authors ? ` · ${authors}` : '');
 
         // Tags
@@ -377,7 +397,9 @@
           });
         }
 
-        grid.appendChild(card);
+        // Add to appropriate column (round-robin distribution)
+        const columnIndex = i % numColumns;
+        columns[columnIndex].appendChild(card);
       }
     } catch(err){
       console.error(err);
