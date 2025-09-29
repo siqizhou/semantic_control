@@ -5,10 +5,10 @@
     "year": 2024,
     "authors": ["Xintong Du", "Siqi Zhou", "Angela P. Schoellig"],
     "tags": ["Mobile Manipulator", "Safe Control", "Theoretic Tools"],
-    "pdf": "#",
+    "pdf": "https://www.dynsyslab.org/wp-content/papercite-data/pdf/du-ral24.pdf",
     "website": "https://tracy-du.notion.site/Hierarchical-Task-Model-Predictive-Control-for-Sequential-Mobile-Manipulation-Tasks-ced3e8d041774bc1b327ea3fc234e7a4?pvs=4",
     "code": "#",
     "doi": "10.1109/LRA.2023.3342671",
-    "thumb": "projects/thumbs/figure-placeholder.svg",
+    "thumb": "projects/thumbs/hierarchical-task-mpc.svg",
     "order": 100
   }
