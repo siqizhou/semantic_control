@@ -394,11 +394,49 @@
 
       const projects = await Promise.all(files.map(loadOne));
 
-      projects.sort((a, b) =>
-        (b.order || 0) - (a.order || 0) ||
-        (b.year || 0) - (a.year || 0) ||
-        String(a.title).localeCompare(String(b.title))
-      );
+      projects.sort((a, b) => {
+        // First sort by order (if specified)
+        if ((b.order || 0) !== (a.order || 0)) {
+          return (b.order || 0) - (a.order || 0);
+        }
+        
+        // Then sort by venue type (journal papers first)
+        const getVenueType = (venue) => {
+          if (!venue) return 3; // Unknown venues last
+          const venueLower = venue.toLowerCase();
+          // Journal venues
+          if (venueLower.includes('ra-l') || venueLower.includes('t-ro') || 
+              venueLower.includes('ijrr') || venueLower.includes('automatica') ||
+              venueLower.includes('ieee transactions') || venueLower.includes('journal')) {
+            return 0; // Journals first
+          }
+          // Conference venues
+          if (venueLower.includes('icra') || venueLower.includes('iros') || 
+              venueLower.includes('rss') || venueLower.includes('cora') ||
+              venueLower.includes('conference') || venueLower.includes('symposium')) {
+            return 1; // Conferences second
+          }
+          // Preprints and others
+          if (venueLower.includes('preprint') || venueLower.includes('arxiv')) {
+            return 2; // Preprints third
+          }
+          return 3; // Unknown venues last
+        };
+        
+        const venueTypeA = getVenueType(a.venue);
+        const venueTypeB = getVenueType(b.venue);
+        if (venueTypeA !== venueTypeB) {
+          return venueTypeA - venueTypeB;
+        }
+        
+        // Then sort by year (newest first)
+        if ((b.year || 0) !== (a.year || 0)) {
+          return (b.year || 0) - (a.year || 0);
+        }
+        
+        // Finally sort by title alphabetically
+        return String(a.title).localeCompare(String(b.title));
+      });
 
       // Collect all unique tags
       const allTags = new Set();
