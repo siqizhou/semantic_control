@@ -4,7 +4,7 @@
     "venue": "RA-L",
     "year": 2025,
     "authors": ["Lukas Brunke", "Yanni Zhang", "Ralf Römer", "Jack Naimer", "Nikola Staykov", "Siqi Zhou", "Angela P. Schoellig"],
-    "tags": ["Manipulation", "Semantic Safety"],
+    "tags": ["Manipulator", "Semantic Safety"],
     "pdf": "https://arxiv.org/pdf/2410.15185",
     "website": "https://utiasdsl.github.io/semantic-manipulation/",
     "doi": "10.1109/LRA.2025.3553046",
