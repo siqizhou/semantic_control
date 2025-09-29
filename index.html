@@ -223,7 +223,7 @@
       <a href="index.html" class="brand">Semantic Control<span class="dot">.</span></a>
       <nav class="links" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a href="categories/index.html">Categories</a>
+        <a href="related-work/index.html">Related Work</a>
         <a href="people/index.html">People</a>
       </nav>
     </div>
@@ -345,14 +345,14 @@
         // Links
         const linksEl = node.querySelector('.links-row');
         const linkEntries = {
-          PDF: p.pdf,
-          Website: p.website,
-          Code: p.code
+          pdf: p.pdf,
+          website: p.website,
+          code: p.code
         };
         
         // Add DOI if available
         if (p.doi) {
-          linkEntries.DOI = `https://doi.org/${p.doi}`;
+          linkEntries.doi = `https://doi.org/${p.doi}`;
         }
         
         addLinks(linksEl, linkEntries);
