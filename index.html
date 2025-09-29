@@ -122,8 +122,9 @@
       }
       .banner .overlay-subtitle{
         position: absolute;
-        top: calc(75% + 3.5rem);
+        top: 75%;
         left: 0;
+        margin-top: 3.5rem;
         color: #0e0e0e;
         font-size: clamp(0.8rem, 2.5vw, 1.1rem);
         font-weight: 200;
@@ -131,11 +132,6 @@
         font-family: var(--chosen-font), serif;
         z-index: 6;
       }
-    @media (max-width: 768px) {
-      .banner .overlay-subtitle{
-        top: calc(75% + 2.5rem);
-      }
-    }
 
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
     .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
