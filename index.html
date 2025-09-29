@@ -532,7 +532,9 @@
           btn.classList.add('active');
           
           const selectedTag = btn.getAttribute('data-tag');
-          filterPapers(selectedTag, projects, columns, allCards);
+          // Get current columns from DOM instead of using stored reference
+          const currentColumns = Array.from(grid.querySelectorAll('.grid-column'));
+          filterPapers(selectedTag, projects, currentColumns, allCards);
         });
       });
 
@@ -542,7 +544,9 @@
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           const newNumColumns = getNumColumns();
-          if (newNumColumns !== numColumns) {
+          const currentColumns = grid.querySelectorAll('.grid-column');
+          
+          if (newNumColumns !== currentColumns.length) {
             // Clear existing columns
             grid.innerHTML = '';
             
