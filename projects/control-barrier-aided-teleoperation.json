@@ -4,7 +4,7 @@
     "venue": "ICRA",
     "year": 2024,
     "authors": ["Siqi Zhou", "Sotiris Papatheodorou", "Stefan Leutenegger", "Angela P. Schoellig"],
-    "tags": ["Flying Robot", "Navigation", "Perceptive Safety"],
+    "tags": ["Flying Robot", "Navigation", "SLAM", "Perceptive Safety"],
     "pdf": "https://arxiv.org/pdf/2404.14546",
     "website": "#",
     "code": "#",
