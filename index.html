@@ -164,6 +164,46 @@
     }
 
     section{ padding: 2.5rem 0; }
+    
+    .tag-filter{
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    
+    .tag-filter-container{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .tag-filter-btn{
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-family: var(--chosen-font), serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    
+    .tag-filter-btn:hover{
+      background: var(--brand);
+      color: var(--bg);
+      border-color: var(--brand);
+    }
+    
+    .tag-filter-btn.active{
+      background: var(--brand);
+      color: var(--bg);
+      border-color: var(--brand);
+    }
+    
     .grid{
       display: flex;
       gap: 1.2rem;
@@ -252,7 +292,12 @@
     </section>
 
     <section id="papers" aria-label="Papers">
-       <div id="papers-grid" class="grid" role="list"></div>
+      <div class="tag-filter">
+        <div class="tag-filter-container">
+          <button class="tag-filter-btn active" data-tag="all">All</button>
+        </div>
+      </div>
+      <div id="papers-grid" class="grid" role="list"></div>
       <template id="paper-card-template">
         <article class="paper-card" role="listitem">
           <img class="thumb" alt="">
@@ -295,6 +340,25 @@
       });
     }
 
+    function filterPapers(selectedTag, projects, columns, allCards) {
+      // Clear all columns
+      columns.forEach(column => column.innerHTML = '');
+      
+      // Filter projects based on selected tag
+      const filteredProjects = selectedTag === 'all' 
+        ? projects 
+        : projects.filter(p => p.tags && p.tags.includes(selectedTag));
+      
+      // Re-distribute filtered projects to columns
+      filteredProjects.forEach((p, i) => {
+        const columnIndex = i % columns.length;
+        const card = allCards[p._file];
+        if (card) {
+          columns[columnIndex].appendChild(card);
+        }
+      });
+    }
+
     async function loadOne(filename){
       const res = await fetch(`projects/${filename}`);
       if (!res.ok) throw new Error(`Failed to load ${filename}`);
@@ -316,6 +380,26 @@
         String(a.title).localeCompare(String(b.title))
       );
 
+      // Collect all unique tags
+      const allTags = new Set();
+      projects.forEach(p => {
+        if (p.tags && Array.isArray(p.tags)) {
+          p.tags.forEach(tag => allTags.add(tag));
+        }
+      });
+
+      // Create tag filter buttons
+      const tagFilterContainer = document.querySelector('.tag-filter-container');
+      const sortedTags = Array.from(allTags).sort();
+      
+      sortedTags.forEach(tag => {
+        const button = document.createElement('button');
+        button.className = 'tag-filter-btn';
+        button.setAttribute('data-tag', tag);
+        button.textContent = tag;
+        tagFilterContainer.appendChild(button);
+      });
+
       // Create columns (assuming 3 columns for desktop)
       const numColumns = 3;
       const columns = [];
@@ -326,10 +410,19 @@
         columns.push(column);
       }
 
+      // Store all cards for filtering
+      const allCards = {};
+      
       for (let i = 0; i < projects.length; i++){
         const p = projects[i];
         const node = tpl.content.cloneNode(true);
         const card = node.querySelector('.paper-card');
+        
+        // Add project ID for filtering
+        card.setAttribute('data-project-id', p._file);
+        
+        // Store card for filtering
+        allCards[p._file] = card;
 
         // Thumbnail or placeholder
         const img = node.querySelector('.thumb');
@@ -401,6 +494,20 @@
         const columnIndex = i % numColumns;
         columns[columnIndex].appendChild(card);
       }
+
+      // Add event listeners to filter buttons (after cards are created)
+      const filterButtons = document.querySelectorAll('.tag-filter-btn');
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons
+          filterButtons.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          const selectedTag = btn.getAttribute('data-tag');
+          filterPapers(selectedTag, projects, columns, allCards);
+        });
+      });
     } catch(err){
       console.error(err);
       grid.insertAdjacentHTML('beforebegin',
