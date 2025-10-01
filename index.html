@@ -135,26 +135,32 @@
       
       /* Mobile portrait mode adjustments */
       @media (max-width: 768px) and (orientation: portrait) {
+        .banner .overlay-text{
+          font-size: clamp(1.2rem, 3.5vw, 2rem);
+        }
         .banner .overlay-subtitle{
           top: 70%;
           margin-top: 2.5rem;
-          font-size: clamp(0.5rem, 1.2vw, 0.7rem);
         }
       }
       
       /* Mobile landscape mode adjustments */
       @media (max-width: 768px) and (orientation: landscape) {
+        .banner .overlay-text{
+          font-size: clamp(1rem, 3vw, 1.8rem);
+        }
         .banner .overlay-subtitle{
           top: 75%;
           margin-top: 2rem;
-          font-size: clamp(0.4rem, 1vw, 0.6rem);
         }
       }
       
       /* Very small mobile devices */
       @media (max-width: 480px) {
+        .banner .overlay-text{
+          font-size: clamp(1rem, 3vw, 1.5rem);
+        }
         .banner .overlay-subtitle{
-          font-size: clamp(0.4rem, 1vw, 0.6rem);
           margin-top: 1.5rem;
         }
       }
