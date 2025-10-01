@@ -108,30 +108,38 @@
        pointer-events: none;
        z-index: 5;
      }
-      .banner .overlay-text{
-        position: absolute;
-        top: 75%;
-        left: 0;
-        color: #0e0e0e;
-        font-size: clamp(1.8rem, 5vw, 2.8rem);
-        font-weight: 300;
-        text-align: left;
-        font-family: var(--chosen-font), serif;
-        letter-spacing: .5px;
-        z-index: 6;
-      }
-      .banner .overlay-subtitle{
-        position: absolute;
-        top: 75%;
-        left: 0;
-        margin-top: 3.5rem;
-        color: #0e0e0e;
-        font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-        font-weight: 200;
-        text-align: left;
-        font-family: var(--chosen-font), serif;
-        z-index: 6;
-      }
+
+     .banner .overlay-text {
+      position: absolute;
+      bottom: 25%; /* Changed from top: 75% - same position but clearer */
+      left: 0;
+      color: #0e0e0e;
+      font-size: clamp(1.5rem, 4vw, 2.8rem); /* Reduced mobile size */
+      font-weight: 300;
+      text-align: left;
+      font-family: var(--chosen-font), serif;
+      letter-spacing: .5px;
+      z-index: 6;
+      margin: 0;
+      padding: 0 1rem;
+      line-height: 1.1;
+    }
+
+    .banner .overlay-subtitle {
+      position: absolute;
+      bottom: 25%; /* Same anchor point */
+      left: 0;
+      transform: translateY(calc(100% + 0.3rem)); /* Position below title with small gap */
+      color: #0e0e0e;
+      font-size: clamp(0.75rem, 2vw, 1.1rem); /* Reduced mobile size */
+      font-weight: 200;
+      text-align: left;
+      font-family: var(--chosen-font), serif;
+      z-index: 6;
+      margin: 0;
+      padding: 0 1rem;
+      line-height: 1.2;
+    }
 
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
     .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
