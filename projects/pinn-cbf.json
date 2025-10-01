@@ -1,0 +1,14 @@
+{
+    "title": "Addressing Relative Degree Issues in Control Barrier Function Synthesis with Physics-Informed Neural Networks",
+    "abstract": "In robotics, control barrier function (CBF)–based safety filters are commonly used to enforce state constraints. A critical challenge arises when the relative degree of the CBF varies across the state space. This variability can create regions within the safe set where the control input becomes unconstrained. When implemented as a safety filter, this may result in chattering near the safety boundary and ultimately compromise system safety. To address this issue, we propose a novel approach for CBF synthesis by formulating it as solving a set of boundary value problems. The solutions to the boundary value problems are determined using physics-informed neural networks (PINNs). Our approach ensures that the synthesized CBFs maintain a constant relative degree across the set of admissible states, thereby preventing unconstrained control scenarios. We illustrate the approach in simulation and further verify it through real-world quadrotor experiments, demonstrating its effectiveness in preserving desired system safety properties.",
+    "venue": "Preprint",
+    "year": 2025,
+    "authors": ["Lukas Brunke", "Siqi Zhou", "Francesco D’Orazio", "Angela P. Schoellig"],
+    "tags": ["Safe Control", "Theoretic Tools"],
+    "pdf": "https://arxiv.org/pdf/2504.06242",
+    "website": "#",
+    "code": "#",
+    "doi": "#",
+    "thumb": "projects/thumbs/pinn-cbf.svg",
+    "order": 100
+  }

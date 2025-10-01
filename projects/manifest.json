@@ -5,5 +5,6 @@
     "preventing-inactive-cbf-safety-filter.json",
     "control-barrier-aided-teleoperation.json",
     "hierarchical-task-mpc.json",
-    "swarmgpt.json"
+    "swarmgpt.json",
+    "pinn-cbf.json"
   ]  
