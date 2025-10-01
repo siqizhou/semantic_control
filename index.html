@@ -132,38 +132,6 @@
         font-family: var(--chosen-font), serif;
         z-index: 6;
       }
-      
-      /* Mobile portrait mode adjustments */
-      @media (max-width: 768px) and (orientation: portrait) {
-        .banner .overlay-text{
-          font-size: clamp(1.2rem, 3.5vw, 2rem);
-        }
-        .banner .overlay-subtitle{
-          top: 70%;
-          margin-top: 2.5rem;
-        }
-      }
-      
-      /* Mobile landscape mode adjustments */
-      @media (max-width: 768px) and (orientation: landscape) {
-        .banner .overlay-text{
-          font-size: clamp(1rem, 3vw, 1.8rem);
-        }
-        .banner .overlay-subtitle{
-          top: 75%;
-          margin-top: 2rem;
-        }
-      }
-      
-      /* Very small mobile devices */
-      @media (max-width: 480px) {
-        .banner .overlay-text{
-          font-size: clamp(1rem, 3vw, 1.5rem);
-        }
-        .banner .overlay-subtitle{
-          margin-top: 1.5rem;
-        }
-      }
 
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
     .intro .subtitle{ font-size: 1rem; font-style: italic; font-weight: 200; }
