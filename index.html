@@ -553,8 +553,8 @@
           code: p.code
         };
         
-        // Add DOI if available
-        if (p.doi) {
+        // Add DOI if available and not placeholder
+        if (p.doi && p.doi !== '#') {
           linkEntries.doi = `https://doi.org/${p.doi}`;
         }
         
