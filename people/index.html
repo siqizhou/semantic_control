@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contributors - Semantic Control</title>
+  <meta name="description" content="Meet the contributors behind Semantic Control research." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚪️</text></svg>">
+
+  <!-- Font: Roboto Slab -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0e0f12;
+      --text: #ffffff;
+      --muted: #b7c0cc;
+      --brand: #cbe9f9;   /* light blue */
+      --brand-2: #a7ffb7;
+      --card: #151821;
+      --border: #232736;
+      --maxw: 1024px;
+
+      /* Animation speed controls */
+      --draw-duration: 9000ms;  /* slow overall draw (9s) */
+      --draw-stagger: 160ms;     /* delay between each stroke */
+    }
+
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #ffffff;
+        --text: #0d1017;
+        --muted: #3b4756;
+        --brand: #87d6ff;   /* keep light blue as well */
+        --brand-2: #00a86b;
+        --card: #f4f7fb;
+        --border: #e6ebf2;
+      }
+    }
+
+    *,*::before,*::after{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+
+    body{
+      margin: 0; 
+      --chosen-font: 'Roboto Slab';
+      font: 200 16px/1.6 var(--chosen-font), serif;
+      color: var(--text); 
+      background: var(--bg);
+    }
+
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 1rem; }
+
+    .site-header{
+      position: sticky; top: 0; z-index: 10; backdrop-filter: saturate(180%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav{ display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; }
+    .brand{ font-weight: 200; letter-spacing: .5px; font-family: var(--chosen-font), serif; text-decoration: none; color: var(--text); }
+    .brand .dot{ color: var(--brand); font-size: 1.1em; }
+    .links{ display: flex; gap: 1rem; font-family: var(--chosen-font), serif; font-weight: 200; }
+
+    .links a{
+      color: var(--text); text-decoration: none; transition: color .2s;
+      position: relative;
+    }
+    .links a:hover{ color: var(--brand); }
+    .links a.active{ color: var(--brand); }
+
+    main{ padding: 2rem 0; }
+
+    .page-header{
+      text-align: center; margin-bottom: 3rem;
+    }
+    .page-title{
+      font-size: 2.5rem; font-weight: 200; margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-subtitle{
+      font-size: 1.1rem; color: var(--muted); max-width: 600px; margin: 0 auto;
+    }
+
+    .contributors-grid{
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem; margin-top: 2rem;
+    }
+
+    .contributor-card{
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem; transition: transform .2s, box-shadow .2s;
+    }
+    .contributor-card:hover{
+      transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    }
+
+    .photo-container{
+      width: 120px; height: 120px; margin: 0 auto 1.5rem; display: block;
+    }
+
+    .contributor-photo{
+      width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+      display: block; border: 3px solid var(--border);
+    }
+
+    .contributor-name{
+      font-size: 1.4rem; font-weight: 400; text-align: center; margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .contributor-position-affiliation{
+      font-size: 0.9rem; color: var(--text); text-align: center; margin-bottom: 1rem;
+      font-weight: 300; line-height: 1.4;
+    }
+
+    .contributor-bio{
+      font-size: 0.95rem; line-height: 1.6; color: var(--text);
+      text-align: left; margin-bottom: 1rem;
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
+    }
+
+    .contributor-bio.expanded{
+      max-height: 500px; transition: max-height 0.3s ease-in;
+    }
+
+    .bio-toggle{
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;
+      font-family: var(--chosen-font); font-size: 0.9rem; font-weight: 300;
+      transition: all 0.2s; margin: 0 auto; display: block;
+    }
+
+    .bio-toggle:hover{
+      border-color: var(--brand); color: var(--brand);
+    }
+
+    .contributor-links{
+      display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem;
+    }
+
+    .contributor-links a{
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      transition: color .2s;
+    }
+    .contributor-links a:hover{ color: var(--brand); }
+
+    .section-title{
+      font-size: 2rem; font-weight: 300; margin: 3rem 0 2rem;
+      text-align: center; color: var(--text);
+    }
+
+    .placeholder-photo{
+      width: 120px; height: 120px; border-radius: 50%; 
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
+      color: var(--bg); font-size: 2rem; font-weight: 300;
+    }
+
+    .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; }
+    .site-footer a{ color: var(--brand); }
+
+    @media (max-width: 768px){
+      .contributors-grid{ grid-template-columns: 1fr; gap: 1.5rem; }
+      .page-title{ font-size: 2rem; }
+      .contributor-card{ padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a href="../index.html" class="brand">Semantic Control<span class="dot">.</span></a>
+      <nav class="links" aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="index.html" class="active">Contributors</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-header">
+      <h1 class="page-title"></h1>
+      <p class="page-subtitle">
+      </p>
+    </div>
+
+    <section class="contributors-section">
+      <h2 class="section-title">Core Researchers</h2>
+      <div class="contributors-grid" id="contributors-grid">
+        <!-- Contributors will be populated by JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© <span id="year"></span> Semantic Control. The projects are supported by the European Union's Horizon Europe research and innovation programme under the Marie Skłodowska-Curie grant agreement No. 101155035, by the <a href="https://www.robotics-institute-germany.de/">Robotics Institute Germany</a> under BMBF grant 16ME0997K, and by the Humboldt Professorship for Robotics and Artificial Intelligence.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Helper function to generate photo path from name
+    function getPhotoPath(name) {
+      const nameParts = name.toLowerCase().split(' ');
+      const firstName = nameParts[0];
+      const lastName = nameParts[nameParts.length - 1];
+      return `./profile_photo/${firstName}_${lastName}`;
+    }
+
+
+    // Contributor data structure
+    const contributors = [
+      {
+        name: "Angela P. Schoellig",
+        title: "Professor",
+        affiliation: "Technical University of Munich",
+        bio: "Angela Schoellig is an Alexander von Humboldt Professor of Robotics and Artificial Intelligence (AI) at the Technical University of Munich. She is a member of the Board of Directors at the Munich Institute of Robotics and Machine Intelligence (MIRMI) and serves as the Coordinator of the Robotics Institute Germany (RIG). Angela conducts research at the intersection of robotics, controls, and machine learning. Her goal is to enhance the performance, safety, and autonomy of robots by enabling them to learn from past experiments and from each other.",
+        photo: getPhotoPath("Angela P. Schoellig"),
+        links: {
+          website: "https://www.dynsyslab.org/prof-angela-schoellig/",
+          google_scholar: "https://scholar.google.com/citations?user=example"
+        }
+      },
+      {
+        name: "SiQi Zhou",
+        title: "Assistant Professor",
+        affiliation: "Simon Fraser University",
+        bio: "SiQi Zhou an Assistant Professor at Simon Fraser University. Previously, she was a Senior Scientist in the Learning Systems and Robotics Lab led by Prof. Angela Schoellig at the Technical University of Munich. Her research is focused on safe robot decision-making. The overarching goal is to enable robots to operate safely within unstructured environments and intelligently accomplish tasks alongside humans. Her research interests include control theory, machine learning, and robot decision-making with a focus on semantically safe behaviours.",
+        photo: getPhotoPath("SiQi Zhou"),
+        links: {
+          website: "https://siqizhou.com",
+          google_scholar: "https://scholar.google.com/citations?user=5fGdja8AAAAJ&hl=en"
+        }
+      },
+      {
+        name: "Lukas Brunke",
+        title: "Research Scientist / PhD Candidate",
+        affiliation: "University of Toronto and Technical University of Munich",
+        bio: "Lukas Brunke is a PhD candidate at the University of Toronto and the Technical University of Munich working at the Learning Systems and Robotics Lab supervised by Prof. Angela Schoellig. He is interested in combining model-based control algorithms with machine learning methods for safe and high-performance robotic applications in uncertain and dynamic environments.",
+        photo: getPhotoPath("Lukas Brunke"),
+        links: {
+          website: "https://www.lukasbrunke.com/",
+          google_scholar: "https://scholar.google.com/citations?hl=en&user=THqlzq4AAAAJ"
+        }
+      },
+      {
+        name: "Benjamin Bogenberger",
+        title: "Research Scientist / PhD Candidate",
+        affiliation: "Technical University of Munich",
+        bio: "Benjamin Bogenberger is a PhD candidate at the Technical University of Munich working at the Learning Systems and Robotics Lab supervised by Prof. Angela Schoellig. His main interests include control for complex systems, semantic reasoning, and robotics.",
+        photo: getPhotoPath("Benjamin Bogenberger"),
+        links: {
+          website: "https://uspfe.github.io/",
+          google_scholar: "https://scholar.google.com/citations?hl=en&user=BnddWQsAAAAJ"
+        }
+      }
+    ];
+
+    function createContributorCard(contributor) {
+      const card = document.createElement('div');
+      card.className = 'contributor-card';
+      
+      // Create photo element directly
+      const photoContainer = document.createElement('div');
+      photoContainer.className = 'photo-container';
+      
+      const basePath = getPhotoPath(contributor.name);
+      const img = document.createElement('img');
+      img.src = basePath + '.jpg'; // Try .jpg first
+      img.alt = contributor.name;
+      img.className = 'contributor-photo';
+      
+      // Fallback to placeholder if image fails to load
+      img.onerror = function() {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'placeholder-photo';
+        placeholder.textContent = contributor.name.split(' ').map(n => n[0]).join('');
+        photoContainer.innerHTML = '';
+        photoContainer.appendChild(placeholder);
+      };
+      
+      photoContainer.appendChild(img);
+      
+      const linksHtml = Object.entries(contributor.links)
+        .filter(([key, url]) => url && url !== '#')
+        .map(([key, url]) => {
+          const label = key.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+          return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+        }).join(' | ');
+      
+      const positionAffiliation = `${contributor.title}<br>${contributor.affiliation}`;
+      
+      card.innerHTML = `
+        <h3 class="contributor-name">${contributor.name}</h3>
+        <div class="contributor-position-affiliation">${positionAffiliation}</div>
+        <p class="contributor-bio">${contributor.bio}</p>
+        <button class="bio-toggle" onclick="toggleBio(this)">Show Bio</button>
+        ${linksHtml ? `<div class="contributor-links">${linksHtml}</div>` : ''}
+      `;
+      
+      // Insert photo at the beginning
+      card.insertBefore(photoContainer, card.firstChild);
+      
+      return card;
+    }
+
+    function toggleBio(button) {
+      const bio = button.previousElementSibling;
+      const isExpanded = bio.classList.contains('expanded');
+      
+      if (isExpanded) {
+        bio.classList.remove('expanded');
+        button.textContent = 'Show Bio';
+      } else {
+        bio.classList.add('expanded');
+        button.textContent = 'Hide Bio';
+      }
+    }
+
+    function renderContributors() {
+      const grid = document.getElementById('contributors-grid');
+      grid.innerHTML = '';
+      
+      contributors.forEach(contributor => {
+        const card = createContributorCard(contributor);
+        grid.appendChild(card);
+      });
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      renderContributors();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
