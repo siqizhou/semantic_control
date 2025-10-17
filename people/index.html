@@ -90,8 +90,32 @@
     }
 
     .contributors-grid{
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem; margin-top: 2rem; align-items: start;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    
+    .contributors-column{
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      width: 300px;
+      flex-shrink: 0;
+    }
+    
+    /* Responsive column adjustments */
+    @media (max-width: 920px) {
+      .contributors-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+      .contributors-column {
+        width: 100%;
+        max-width: 400px;
+      }
     }
 
     .contributor-card{
@@ -336,13 +360,31 @@
       }
     }
 
+    function getNumColumns() {
+      const width = window.innerWidth;
+      if (width < 920) return 1;
+      if (width < 1200) return 2;
+      return 3;
+    }
+
     function renderContributors() {
       const grid = document.getElementById('contributors-grid');
       grid.innerHTML = '';
       
-      contributors.forEach(contributor => {
+      const numColumns = getNumColumns();
+      const columns = [];
+      for (let i = 0; i < numColumns; i++) {
+        const column = document.createElement('div');
+        column.className = 'contributors-column';
+        grid.appendChild(column);
+        columns.push(column);
+      }
+      
+      // Distribute contributors across columns
+      contributors.forEach((contributor, index) => {
         const card = createContributorCard(contributor);
-        grid.appendChild(card);
+        const columnIndex = index % numColumns;
+        columns[columnIndex].appendChild(card);
       });
     }
 
@@ -350,6 +392,20 @@
     document.addEventListener('DOMContentLoaded', function() {
       renderContributors();
       document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Handle window resize to adjust columns
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const newNumColumns = getNumColumns();
+          const currentColumns = document.querySelectorAll('.contributors-column');
+          
+          if (newNumColumns !== currentColumns.length) {
+            renderContributors(); // Re-render with new column count
+          }
+        }, 250); // Debounce resize events
+      });
     });
   </script>
 </body>
