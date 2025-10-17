@@ -91,12 +91,12 @@
 
     .contributors-grid{
       display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem; margin-top: 2rem;
+      gap: 2rem; margin-top: 2rem; align-items: start;
     }
 
     .contributor-card{
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 2rem; transition: transform .2s, box-shadow .2s;
+      border-radius: 12px; padding: 2rem;
     }
     .contributor-card:hover{
       transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,.15);
@@ -125,10 +125,6 @@
       font-size: 0.95rem; line-height: 1.6; color: var(--text);
       text-align: left; margin-bottom: 1rem;
       max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
-    }
-
-    .contributor-bio.expanded{
-      max-height: 500px; transition: max-height 0.3s ease-in;
     }
 
     .bio-toggle{
@@ -268,6 +264,9 @@
       const card = document.createElement('div');
       card.className = 'contributor-card';
       
+      // Create unique ID for this contributor
+      const contributorId = contributor.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      
       // Create photo element directly
       const photoContainer = document.createElement('div');
       photoContainer.className = 'photo-container';
@@ -301,10 +300,13 @@
       card.innerHTML = `
         <h3 class="contributor-name">${contributor.name}</h3>
         <div class="contributor-position-affiliation">${positionAffiliation}</div>
-        <p class="contributor-bio">${contributor.bio}</p>
-        <button class="bio-toggle" onclick="toggleBio(this)">Show Bio</button>
+        <p class="contributor-bio" id="bio-${contributorId}">${contributor.bio}</p>
+        <button class="bio-toggle" onclick="toggleBioById('${contributorId}')">Show Bio</button>
         ${linksHtml ? `<div class="contributor-links">${linksHtml}</div>` : ''}
       `;
+      
+      // Add individual transition to this card only
+      card.style.transition = 'transform 0.2s, box-shadow 0.2s';
       
       // Insert photo at the beginning
       card.insertBefore(photoContainer, card.firstChild);
@@ -312,15 +314,24 @@
       return card;
     }
 
-    function toggleBio(button) {
-      const bio = button.previousElementSibling;
-      const isExpanded = bio.classList.contains('expanded');
+    function toggleBioById(contributorId) {
+      const bio = document.getElementById(`bio-${contributorId}`);
+      const button = bio.nextElementSibling;
+      
+      if (!bio || !button) return;
+      
+      const isExpanded = bio.style.maxHeight && bio.style.maxHeight !== '0px';
       
       if (isExpanded) {
-        bio.classList.remove('expanded');
+        // Collapse
+        bio.style.maxHeight = '0px';
         button.textContent = 'Show Bio';
       } else {
-        bio.classList.add('expanded');
+        // Expand - calculate actual height needed
+        bio.style.maxHeight = 'none';
+        const actualHeight = bio.scrollHeight + 'px';
+        bio.style.maxHeight = '0px';
+        bio.style.maxHeight = actualHeight;
         button.textContent = 'Hide Bio';
       }
     }
