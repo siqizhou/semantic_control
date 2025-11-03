@@ -109,13 +109,23 @@
     .links a{ opacity: .9; }
     .links a:hover{ color: var(--brand); }
 
-    .hero{ padding: 0 0 1rem; position: relative; }
+    .hero{ 
+      padding: 0 0 1rem; 
+      position: relative; 
+    }
     .banner{
       width: 100%;
       aspect-ratio: 3 / 2;
       overflow: hidden;
-      position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 5;
       background: #ffffff;
+      transition: transform 0.3s ease-out;
+    }
+    
+    .banner.scrolled-up {
+      transform: translateY(-100%);
     }
      /* Base image fills banner */
      .banner .banner-img{
@@ -216,6 +226,17 @@
     .tag-filter{
       padding: 0.5rem 0;
       margin-bottom: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 6;
+      background: var(--bg);
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    }
+    
+    .tag-filter.sticky-active {
+      backdrop-filter: saturate(180%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 95%, transparent);
+      border-bottom: 1px solid var(--border);
     }
     
     .tag-filter-container{
@@ -639,6 +660,9 @@
 
       // Add event listeners to filter buttons (after cards are created)
       const filterButtons = document.querySelectorAll('.tag-filter-btn');
+      const tagFilter = document.querySelector('.tag-filter');
+      const header = document.querySelector('.site-header');
+      
       filterButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           // Remove active class from all buttons
@@ -650,6 +674,19 @@
           // Get current columns from DOM instead of using stored reference
           const currentColumns = Array.from(grid.querySelectorAll('.grid-column'));
           filterPapers(selectedTag, projects, currentColumns, allCards);
+          
+          // Scroll to show the first row of project cards below the categories bar
+          setTimeout(() => {
+            const headerHeight = header ? header.offsetHeight : 0;
+            const tagFilterHeight = tagFilter ? tagFilter.offsetHeight : 0;
+            const gridTop = grid.getBoundingClientRect().top + window.scrollY;
+            const targetScroll = gridTop - headerHeight - tagFilterHeight - 20; // 20px extra spacing
+            
+            window.scrollTo({
+              top: Math.max(0, targetScroll),
+              behavior: 'smooth'
+            });
+          }, 50); // Small delay to ensure DOM updates are complete
         });
       });
 
@@ -771,6 +808,61 @@
       console.error(err);
       // If SVG fails, we still keep the JPEG visible
     }
+  })();
+  </script>
+
+  <!-- Scroll behavior for banner and categories -->
+  <script>
+  (function handleScrollBehavior() {
+    const banner = document.querySelector('.banner');
+    const tagFilter = document.querySelector('.tag-filter');
+    const hero = document.querySelector('.hero');
+    const header = document.querySelector('.site-header');
+    
+    if (!banner || !tagFilter || !hero || !header) return;
+    
+    function updateScrollState() {
+      const headerHeight = header.offsetHeight;
+      
+      // Get the tag filter's position relative to the viewport
+      const tagFilterRect = tagFilter.getBoundingClientRect();
+      const tagFilterTop = tagFilterRect.top;
+      
+      // When the top of the tag filter reaches just below the header (where it will stick)
+      // Set the sticky position dynamically
+      tagFilter.style.top = `${headerHeight}px`;
+      
+      if (tagFilterTop <= headerHeight) {
+        banner.classList.add('scrolled-up');
+        tagFilter.classList.add('sticky-active');
+      } else {
+        // When scrolling back up, restore banner and unstick categories
+        banner.classList.remove('scrolled-up');
+        if (tagFilterTop > headerHeight + 10) {
+          tagFilter.classList.remove('sticky-active');
+        }
+      }
+    }
+    
+    // Throttle scroll events for better performance
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateScrollState();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+    
+    // Handle resize to recalculate positions
+    window.addEventListener('resize', () => {
+      updateScrollState();
+    });
+    
+    // Initial state
+    updateScrollState();
   })();
   </script>
 </body>
