@@ -33,7 +33,7 @@
       --brand-2: #a7ffb7;
       --card: #151821;
       --border: #232736;
-      --maxw: 1024px;
+      --maxw: 100%;
 
       /* Animation speed controls */
       --draw-duration: 9000ms;  /* slow overall draw (9s) */
@@ -63,14 +63,15 @@
       background: var(--bg);
     }
 
-    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 1rem; }
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 3%; }
 
     .site-header{
       position: sticky; top: 0; z-index: 10; backdrop-filter: saturate(180%) blur(8px);
       background: color-mix(in oklab, var(--bg) 80%, transparent);
       border-bottom: 1px solid var(--border);
+      padding: 0 3%;
     }
-    .nav{ display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; }
+    .nav{ display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; width: 100%; }
     .brand{ font-weight: 200; letter-spacing: .5px; font-family: var(--chosen-font), serif; text-decoration: none; color: var(--text); }
     .brand .dot{ color: var(--brand); font-size: 1.1em; }
     .links{ display: flex; gap: 1rem; font-family: var(--chosen-font), serif; font-weight: 200; }
@@ -204,7 +205,7 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap nav">
+    <div class="nav">
       <a href="/" class="brand">Semantic Control for Robotics<span class="dot">.</span></a>
       <nav class="links" aria-label="Primary">
         <a href="/">Home</a>
@@ -369,10 +370,21 @@
     }
 
     function getNumColumns() {
-      const width = window.innerWidth;
-      if (width < 920) return 1;
-      if (width < 1200) return 2;
-      return 3;
+      const screenWidth = window.innerWidth;
+      // Account for 3% padding on each side (6% total)
+      const availableWidth = screenWidth * 0.94;
+      const columnWidth = 300;
+      const gap = 32; // 2rem ≈ 32px
+      
+      if (screenWidth <= 920) return 1;      // Mobile: single column
+      
+      // Calculate how many columns can fit
+      let cols = 2;
+      if (availableWidth >= columnWidth * 2 + gap * 1) cols = 2;
+      if (availableWidth >= columnWidth * 3 + gap * 2) cols = 3;
+      if (availableWidth >= columnWidth * 4 + gap * 3) cols = 4;
+      
+      return cols;
     }
 
     function renderContributors() {
