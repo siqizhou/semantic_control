@@ -135,6 +135,23 @@
       gap: .5rem;
       font-weight: 300;
       border-radius: 0;
+      transition: box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .contributor-card:hover{
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .contributor-card .bio-toggle,
+    .contributor-card .contributor-links,
+    .contributor-card .contributor-links a {
+      cursor: pointer;
+    }
+    
+    .photo-link {
+      display: block;
+      text-decoration: none;
     }
 
     .photo-container{
@@ -154,6 +171,16 @@
     .contributor-position-affiliation{
       font-size: 0.9rem; color: var(--text); text-align: center; margin-bottom: 1rem;
       font-weight: 300; line-height: 1.4;
+    }
+    
+    .institution-link {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .institution-link:hover {
+      color: var(--brand);
     }
 
     .contributor-bio{
@@ -249,6 +276,37 @@
       const lastName = nameParts[nameParts.length - 1];
       return `./profile_photo/${firstName}_${lastName}`;
     }
+    
+    // Institution URLs mapping
+    const institutionUrls = {
+      'Technical University of Munich': 'https://www.tum.de/',
+      'Simon Fraser University': 'https://www.sfu.ca/',
+      'University of Toronto': 'https://www.utoronto.ca/'
+    };
+    
+    // Helper function to create institution link
+    function createInstitutionLink(affiliation) {
+      // Handle exact match first
+      if (institutionUrls[affiliation]) {
+        return `<a href="${institutionUrls[affiliation]}" target="_blank" rel="noopener" class="institution-link">${affiliation}</a>`;
+      }
+      
+      // Handle multiple institutions (e.g., "University of Toronto and Technical University of Munich")
+      // Sort by length (longest first) to avoid partial matches
+      const sortedInstitutions = Object.keys(institutionUrls).sort((a, b) => b.length - a.length);
+      let result = affiliation;
+      
+      for (const institution of sortedInstitutions) {
+        if (result.includes(institution)) {
+          const url = institutionUrls[institution];
+          // Use word boundaries to avoid partial matches, but also handle cases where it appears in the middle of text
+          const regex = new RegExp(institution.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+          result = result.replace(regex, `<a href="${url}" target="_blank" rel="noopener" class="institution-link">${institution}</a>`);
+        }
+      }
+      
+      return result;
+    }
 
 
     // Contributor data structure
@@ -303,6 +361,9 @@
       const card = document.createElement('div');
       card.className = 'contributor-card';
       
+      // Get website URL
+      const websiteUrl = contributor.links && contributor.links.website ? contributor.links.website : null;
+      
       // Create unique ID for this contributor
       const contributorId = contributor.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       
@@ -316,16 +377,37 @@
       img.alt = contributor.name;
       img.className = 'contributor-photo';
       
+      // Wrap photo in link if website exists
+      if (websiteUrl) {
+        const photoLink = document.createElement('a');
+        photoLink.href = websiteUrl;
+        photoLink.target = '_blank';
+        photoLink.rel = 'noopener';
+        photoLink.className = 'photo-link';
+        photoContainer.appendChild(photoLink);
+        photoLink.appendChild(img);
+      } else {
+        photoContainer.appendChild(img);
+      }
+      
       // Fallback to placeholder if image fails to load
       img.onerror = function() {
         const placeholder = document.createElement('div');
         placeholder.className = 'placeholder-photo';
         placeholder.textContent = contributor.name.split(' ').map(n => n[0]).join('');
         photoContainer.innerHTML = '';
-        photoContainer.appendChild(placeholder);
+        if (websiteUrl) {
+          const photoLink = document.createElement('a');
+          photoLink.href = websiteUrl;
+          photoLink.target = '_blank';
+          photoLink.rel = 'noopener';
+          photoLink.className = 'photo-link';
+          photoContainer.appendChild(photoLink);
+          photoLink.appendChild(placeholder);
+        } else {
+          photoContainer.appendChild(placeholder);
+        }
       };
-      
-      photoContainer.appendChild(img);
       
       const linksHtml = Object.entries(contributor.links)
         .filter(([key, url]) => url && url !== '#')
@@ -334,7 +416,8 @@
           return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
         }).join(' | ');
       
-      const positionAffiliation = `${contributor.title}<br>${contributor.affiliation}`;
+      const affiliationWithLink = createInstitutionLink(contributor.affiliation);
+      const positionAffiliation = `${contributor.title}<br>${affiliationWithLink}`;
       
       card.innerHTML = `
         <h3 class="contributor-name">${contributor.name}</h3>
@@ -343,6 +426,20 @@
         <button class="bio-toggle" onclick="toggleBioById('${contributorId}')">Show Bio</button>
         ${linksHtml ? `<div class="contributor-links">${linksHtml}</div>` : ''}
       `;
+      
+      // Add click handler to card (but not for button or links)
+      if (websiteUrl) {
+        card.addEventListener('click', function(e) {
+          // Don't navigate if clicking on button, links, bio, or institution link
+          if (e.target.closest('.bio-toggle') || 
+              e.target.closest('.contributor-links') ||
+              e.target.closest('.contributor-bio') ||
+              e.target.closest('.institution-link')) {
+            return;
+          }
+          window.open(websiteUrl, '_blank', 'noopener');
+        });
+      }
       
       // Add individual transition to this card only
       card.style.transition = 'transform 0.2s, box-shadow 0.2s';
