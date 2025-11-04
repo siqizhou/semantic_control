@@ -354,6 +354,38 @@
           website: "https://uspfe.github.io/",
           google_scholar: "https://scholar.google.com/citations?hl=en&user=BnddWQsAAAAJ"
         }
+      },
+      {
+        name: "Xintong Du",
+        title: "Research Scientist / PhD Candidate",
+        affiliation: "University of Toronto",
+        bio: "Xintong Du is a PhD candidate at the University of Toronto working at the Learning Systems and Robotics Lab supervised by Prof. Angela Schoellig. Her research focuses on developing hierarchical task MPC for efficient mobile manipulation in unstructured environments.",
+        photo: getPhotoPath("Xintong Du"),
+        links: {
+          google_scholar: "https://scholar.google.com/citations?user=HrsnsHEAAAAJ&hl=en"
+        }
+      },
+      {
+        name: "Jingxing Qian",
+        title: "Research Scientist / PhD Candidate",
+        affiliation: "University of Toronto",
+        bio: "Jingxing Qian is a PhD candidate at the University of Toronto working at the Learning Systems and Robotics Lab supervised by Prof. Angela Schoellig. His research focuses on robot perception and 3D spatial understanding in unstructured, semi-static environments.",
+        photo: getPhotoPath("Jingxing Qian"),
+        links: {
+          google_scholar: "https://scholar.google.com/citations?user=OZk7X80AAAAJ&hl=en"
+        }
+      },
+      {
+        name: "Martin Schuck",
+        title: "Research Scientist / PhD Candidate",
+        affiliation: "Technical University of Munich",
+        bio: "Martin Schuck is a PhD candidate at the Technical University of Munich working at the Learning Systems and Robotics Lab supervised by Prof. Angela Schoellig. His research interests focus on deep reinforcement learning as well as its applications across robotics and gaming.",
+        photo: getPhotoPath("Martin Schuck"),
+        photoExtension: '.png',
+        links: {
+          website: "https://amacati.github.io/",
+          google_scholar: "https://scholar.google.com/citations?user=FIcub0kAAAAJ"
+        }
       }
     ];
 
@@ -373,7 +405,8 @@
       
       const basePath = getPhotoPath(contributor.name);
       const img = document.createElement('img');
-      img.src = basePath + '.jpg'; // Try .jpg first
+      // Try .jpg first, then .png if specified or .jpg fails
+      img.src = contributor.photoExtension ? basePath + contributor.photoExtension : basePath + '.jpg';
       img.alt = contributor.name;
       img.className = 'contributor-photo';
       
@@ -392,20 +425,45 @@
       
       // Fallback to placeholder if image fails to load
       img.onerror = function() {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'placeholder-photo';
-        placeholder.textContent = contributor.name.split(' ').map(n => n[0]).join('');
-        photoContainer.innerHTML = '';
-        if (websiteUrl) {
-          const photoLink = document.createElement('a');
-          photoLink.href = websiteUrl;
-          photoLink.target = '_blank';
-          photoLink.rel = 'noopener';
-          photoLink.className = 'photo-link';
-          photoContainer.appendChild(photoLink);
-          photoLink.appendChild(placeholder);
+        // Try .png if .jpg failed, or .jpg if .png failed
+        if (!contributor.photoExtension || contributor.photoExtension === '.jpg') {
+          const pngPath = basePath + '.png';
+          img.src = pngPath;
+          img.onerror = function() {
+            // Both failed, show placeholder
+            const placeholder = document.createElement('div');
+            placeholder.className = 'placeholder-photo';
+            placeholder.textContent = contributor.name.split(' ').map(n => n[0]).join('');
+            photoContainer.innerHTML = '';
+            if (websiteUrl) {
+              const photoLink = document.createElement('a');
+              photoLink.href = websiteUrl;
+              photoLink.target = '_blank';
+              photoLink.rel = 'noopener';
+              photoLink.className = 'photo-link';
+              photoContainer.appendChild(photoLink);
+              photoLink.appendChild(placeholder);
+            } else {
+              photoContainer.appendChild(placeholder);
+            }
+          };
         } else {
-          photoContainer.appendChild(placeholder);
+          // .png failed, show placeholder
+          const placeholder = document.createElement('div');
+          placeholder.className = 'placeholder-photo';
+          placeholder.textContent = contributor.name.split(' ').map(n => n[0]).join('');
+          photoContainer.innerHTML = '';
+          if (websiteUrl) {
+            const photoLink = document.createElement('a');
+            photoLink.href = websiteUrl;
+            photoLink.target = '_blank';
+            photoLink.rel = 'noopener';
+            photoLink.className = 'photo-link';
+            photoContainer.appendChild(photoLink);
+            photoLink.appendChild(placeholder);
+          } else {
+            photoContainer.appendChild(placeholder);
+          }
         }
       };
       
