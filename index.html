@@ -276,7 +276,7 @@
       bottom: 36%;
       left: 0;
       color: #0e0e0e;
-      font-size: clamp(1.5rem, 4vw, 2.8rem);
+      font-size: clamp(1.2rem, 4vw, 2.8rem);
       font-weight: 300;
       text-align: left;
       font-family: var(--chosen-font), serif;
@@ -288,10 +288,10 @@
 
     .banner .overlay-subtitle {
       position: absolute;
-      bottom: calc(36% - clamp(0.75rem, 2vw, 1.1rem) * 1.2 - 0.1rem);
+      bottom: calc(36% - clamp(0.6rem, 2vw, 1.1rem) * 1.2 - 0.1rem);
       left: 0;
       color: #0e0e0e;
-      font-size: clamp(0.75rem, 2vw, 1.1rem);
+      font-size: clamp(0.6rem, 2vw, 1.1rem);
       font-weight: 200;
       text-align: left;
       font-family: var(--chosen-font), serif;
@@ -299,6 +299,25 @@
       margin: 0;
       padding: 0 1rem;
       line-height: 1.2;
+    }
+    
+    /* Responsive font sizes for banner text */
+    @media (max-width: 480px) {
+      .banner .overlay-text {
+        font-size: clamp(1rem, 5vw, 1.5rem);
+      }
+      .banner .overlay-subtitle {
+        font-size: clamp(0.55rem, 2.5vw, 0.9rem);
+      }
+    }
+    
+    @media (min-width: 481px) and (max-width: 768px) {
+      .banner .overlay-text {
+        font-size: clamp(1.1rem, 4.5vw, 2rem);
+      }
+      .banner .overlay-subtitle {
+        font-size: clamp(0.6rem, 2.2vw, 1rem);
+      }
     }
 
     .intro{ padding: 1.5rem 0 0.5rem; text-align: center; }
