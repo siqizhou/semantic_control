@@ -46,7 +46,7 @@
       --card: #262626;
       --border: #3a3a3a;
       --maxw: 100%;
-      --banner-stroke: #ffffff;  /* white for dark mode */
+      --banner-stroke: #666666;  /* dark grey for dark mode */
 
       /* Animation speed controls */
       --draw-duration: 9000ms;  /* slow overall draw (9s) */
@@ -62,7 +62,7 @@
       --brand-2: #a7ffb7;
       --card: #262626;
       --border: #3a3a3a;
-      --banner-stroke: #ffffff;  /* white for dark mode */
+      --banner-stroke: #666666;  /* dark grey for dark mode */
     }
 
     /* Light mode (default) */
@@ -258,6 +258,17 @@
        background: linear-gradient(to top, rgba(255,255,255,0.99), rgba(255,255,255,0));
        pointer-events: none;
        z-index: 5;
+     }
+     
+     /* Dark mode gradient overlay - use banner background color for subtle fade */
+     :root[data-theme="dark"] .banner::after {
+       background: linear-gradient(to top, rgba(26,26,26,0.8), rgba(26,26,26,0));
+     }
+     
+     @media (prefers-color-scheme: dark) {
+       :root:not([data-theme="light"]) .banner::after {
+         background: linear-gradient(to top, rgba(26,26,26,0.8), rgba(26,26,26,0));
+       }
      }
 
      .banner .overlay-text {
