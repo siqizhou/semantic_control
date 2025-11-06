@@ -24,6 +24,18 @@
   <!-- font: Roboto Slab -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 
+  <!-- Set theme early to prevent flash -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
   <style>
     :root{
       --bg: #0e0f12;
@@ -39,9 +51,32 @@
       --draw-duration: 9000ms;  /* slow overall draw (9s) */
       --draw-stagger: 160ms;     /* delay between each stroke */
     }
+    
+    /* Dark mode (manual override) */
+    :root[data-theme="dark"]{
+      --bg: #0e0f12;
+      --text: #ffffff;
+      --muted: #b7c0cc;
+      --brand: #87d6ff;   /* light blue */
+      --brand-2: #a7ffb7;
+      --card: #151821;
+      --border: #232736;
+    }
 
+    /* Light mode (default) */
+    :root[data-theme="light"]{
+      --bg: #ffffff;
+      --text: #0d1017;
+      --muted: #3b4756;
+      --brand: #87d6ff;   /* keep light blue in light mode as well */
+      --brand-2: #00a86b;
+      --card: #f4f7fb;
+      --border: #e6ebf2;
+    }
+    
+    /* Auto-detect system preference */
     @media (prefers-color-scheme: light){
-      :root{
+      :root:not([data-theme]){
         --bg: #ffffff;
         --text: #0d1017;
         --muted: #3b4756;
@@ -53,24 +88,58 @@
     }
 
     /* Dark mode inversions for banner and thumbnails */
+    :root[data-theme="dark"] .banner {
+      background: #000000 !important;
+      filter: invert(1);
+    }
+    
     @media (prefers-color-scheme: dark) {
-      .banner {
+      :root:not([data-theme="light"]) .banner {
         background: #000000 !important;
         filter: invert(1);
       }
-      
-      .banner .overlay-text,
-      .banner .overlay-subtitle {
+    }
+    
+    :root[data-theme="dark"] .banner .overlay-text,
+    :root[data-theme="dark"] .banner .overlay-subtitle {
+      color: #ffffff !important;
+      filter: invert(1);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .banner .overlay-text,
+      :root:not([data-theme="light"]) .banner .overlay-subtitle {
         color: #ffffff !important;
         filter: invert(1);
       }
-      
-      .paper-card .thumb {
-        background: #2a2a2a !important;
-        filter: contrast(0) brightness(2) !important;
+    }
+    
+    :root[data-theme="dark"] .thumb-container {
+      background-color: #1a1a1a !important;
+    }
+    
+    :root[data-theme="dark"] .paper-card .thumb {
+      filter: contrast(0) brightness(2) !important;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .thumb-container {
+        background-color: #1a1a1a !important;
       }
       
-      .paper-card .figure-placeholder {
+      :root:not([data-theme="light"]) .paper-card .thumb {
+        filter: contrast(0) brightness(2) !important;
+      }
+    }
+    
+    :root[data-theme="dark"] .paper-card .figure-placeholder {
+      background: #171717 !important;
+      color: #777777 !important;
+      filter: invert(1);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .paper-card .figure-placeholder {
         background: #171717 !important;
         color: #777777 !important;
         filter: invert(1);
@@ -105,9 +174,31 @@
     .nav{ display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; width: 100%; }
     .brand{ font-weight: 200; letter-spacing: .5px; font-family: var(--chosen-font), serif; }
     .brand .dot{ color: var(--brand); }
-    .links{ display: flex; gap: 1rem; font-family: var(--chosen-font), serif; font-weight: 200; }
+    .links{ display: flex; gap: 1rem; font-family: var(--chosen-font), serif; font-weight: 200; align-items: center; }
     .links a{ opacity: .9; }
     .links a:hover{ color: var(--brand); }
+    
+    .theme-toggle{
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-family: var(--chosen-font), serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0.9;
+    }
+    .theme-toggle:hover{
+      background: var(--brand);
+      color: var(--bg);
+      border-color: var(--brand);
+      opacity: 1;
+    }
 
     .hero{ 
       padding: 0 0 1rem; 
@@ -316,15 +407,25 @@
     .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; }
     .site-footer a{ color: var(--brand); }
 
+    /* Thumbnail container */
+    .thumb-container {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background-color: #fefefe;
+      margin-bottom: .5rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
     /* Thumbnail rule */
     .paper-card .thumb{
       width: 100%;
-      aspect-ratio: 1/1;
+      height: 100%;
       object-fit: cover;
-      background: #fefefe;
-      margin-bottom: .5rem;
       display: block;
-      flex-shrink: 0;
     }
 
     /* --- Line-art draw animation (banner.svg) --- */
@@ -346,6 +447,17 @@
       will-change: stroke-dashoffset;
     }
     .draw.inview .svg-draw-stroke { animation-play-state: running; }
+    
+    /* Counter-invert SVG in dark mode (banner has invert filter) */
+    :root[data-theme="dark"] .banner svg {
+      filter: invert(1);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .banner svg {
+        filter: invert(1);
+      }
+    }
 
     @keyframes banner-draw { to { stroke-dashoffset: 0; } }
 
@@ -362,6 +474,10 @@
         <a href="/">Home</a>
         <!-- <a href="/related-work/">Related Work</a> -->
         <a href="/people/">Contributors</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-text">Light</span>
+        </button>
       </nav>
     </div>
   </header>
@@ -408,6 +524,83 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  (function initTheme() {
+    // Set theme early to avoid flash of wrong theme
+    const root = document.documentElement;
+    
+    // Get saved theme or detect system preference
+    function getTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
+      
+      // Detect system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        return 'light';
+      }
+      return 'dark';
+    }
+    
+    // Initialize theme immediately
+    const currentTheme = getTheme();
+    root.setAttribute('data-theme', currentTheme);
+    
+    // Wait for DOM to be ready for button elements
+    function setupThemeToggle() {
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const themeText = document.getElementById('theme-text');
+      
+      if (!themeToggle || !themeIcon || !themeText) return;
+      
+      // Set theme (updates button)
+      function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        
+        // Update button to show what theme you'll switch TO (not current)
+        if (theme === 'dark') {
+          // Currently dark, button shows switch to light
+          themeIcon.textContent = '☀️';
+          themeText.textContent = 'Light';
+        } else {
+          // Currently light, button shows switch to dark
+          themeIcon.textContent = '🌙';
+          themeText.textContent = 'Dark';
+        }
+      }
+      
+      // Set initial button state
+      setTheme(currentTheme);
+      
+      // Toggle theme on button click
+      themeToggle.addEventListener('click', () => {
+        const current = root.getAttribute('data-theme');
+        const newTheme = current === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+      });
+    }
+    
+    // Setup toggle button when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupThemeToggle);
+    } else {
+      setupThemeToggle();
+    }
+    
+    // Listen for system theme changes (only if no manual override)
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+        // Only update if user hasn't manually set a preference
+        if (!localStorage.getItem('theme')) {
+          root.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+          setupThemeToggle(); // Update button if it exists
+        }
+      });
+    }
+  })();
   </script>
 
   <script>
@@ -590,8 +783,13 @@
         // Thumbnail or placeholder
         const img = node.querySelector('.thumb');
         if (p.thumb){
+          // Wrap image in container for background styling
           img.src = p.thumb;
           img.alt = `${p.title} figure`;
+          const thumbContainer = document.createElement('div');
+          thumbContainer.className = 'thumb-container';
+          img.parentNode.replaceChild(thumbContainer, img);
+          thumbContainer.appendChild(img);
         } else {
           img.replaceWith(Object.assign(document.createElement('div'), {
             className: 'figure-placeholder',
