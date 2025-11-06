@@ -370,12 +370,68 @@
       border-bottom: 1px solid var(--border);
     }
     
+    .tag-filter-wrapper{
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .tag-filter-scroll-btn{
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.4rem 0.6rem;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      font-family: var(--chosen-font), serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      opacity: 0.7;
+      z-index: 1;
+    }
+    
+    .tag-filter-scroll-btn:hover{
+      background: var(--brand);
+      color: var(--bg);
+      border-color: var(--brand);
+      opacity: 1;
+    }
+    
+    .tag-filter-scroll-btn:disabled{
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .tag-filter-scroll-btn:disabled:hover{
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    
     .tag-filter-container{
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 0.5rem;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      flex: 1;
+      padding: 0.2rem 0;
+    }
+    
+    .tag-filter-container::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
     
     .tag-filter-btn{
@@ -523,8 +579,12 @@
 
     <section id="papers" aria-label="Papers">
       <div class="tag-filter">
-        <div class="tag-filter-container">
-          <button class="tag-filter-btn active" data-tag="all">All</button>
+        <div class="tag-filter-wrapper">
+          <button class="tag-filter-scroll-btn" id="scroll-left-btn" aria-label="Scroll left">‹</button>
+          <div class="tag-filter-container">
+            <button class="tag-filter-btn active" data-tag="all">All</button>
+          </div>
+          <button class="tag-filter-scroll-btn" id="scroll-right-btn" aria-label="Scroll right">›</button>
         </div>
       </div>
       <div id="papers-grid" class="grid" role="list"></div>
@@ -763,6 +823,19 @@
         button.textContent = tag;
         tagFilterContainer.appendChild(button);
       });
+      
+      // Update scroll buttons after tags are added
+      setTimeout(() => {
+        const scrollLeftBtn = document.getElementById('scroll-left-btn');
+        const scrollRightBtn = document.getElementById('scroll-right-btn');
+        if (tagFilterContainer && scrollLeftBtn && scrollRightBtn) {
+          const { scrollLeft, scrollWidth, clientWidth } = tagFilterContainer;
+          const isAtStart = scrollLeft <= 0;
+          const isAtEnd = scrollLeft >= scrollWidth - clientWidth - 1;
+          scrollLeftBtn.disabled = isAtStart;
+          scrollRightBtn.disabled = isAtEnd;
+        }
+      }, 0);
 
       // Create columns based on screen width
       function getNumColumns() {
@@ -942,6 +1015,48 @@
           }
         }, 250); // Debounce resize events
       });
+
+      // Setup scroll arrows for category menu
+      const scrollLeftBtn = document.getElementById('scroll-left-btn');
+      const scrollRightBtn = document.getElementById('scroll-right-btn');
+      
+      function updateScrollButtons() {
+        if (!tagFilterContainer || !scrollLeftBtn || !scrollRightBtn) return;
+        
+        const { scrollLeft, scrollWidth, clientWidth } = tagFilterContainer;
+        const isAtStart = scrollLeft <= 0;
+        const isAtEnd = scrollLeft >= scrollWidth - clientWidth - 1; // -1 for floating point precision
+        
+        scrollLeftBtn.disabled = isAtStart;
+        scrollRightBtn.disabled = isAtEnd;
+      }
+      
+      if (tagFilterContainer && scrollLeftBtn && scrollRightBtn) {
+        // Scroll left
+        scrollLeftBtn.addEventListener('click', () => {
+          tagFilterContainer.scrollBy({
+            left: -200,
+            behavior: 'smooth'
+          });
+        });
+        
+        // Scroll right
+        scrollRightBtn.addEventListener('click', () => {
+          tagFilterContainer.scrollBy({
+            left: 200,
+            behavior: 'smooth'
+          });
+        });
+        
+        // Update button states on scroll
+        tagFilterContainer.addEventListener('scroll', updateScrollButtons);
+        
+        // Update button states on resize
+        window.addEventListener('resize', updateScrollButtons);
+        
+        // Initial state
+        updateScrollButtons();
+      }
     } catch(err){
       console.error(err);
       grid.insertAdjacentHTML('beforebegin',
