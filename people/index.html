@@ -200,6 +200,17 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     
+    /* Dark mode hover shadow - use lighter shadow for better visibility */
+    :root[data-theme="dark"] .contributor-card:hover {
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .contributor-card:hover {
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+      }
+    }
+    
     .contributor-card .bio-toggle,
     .contributor-card .contributor-links,
     .contributor-card .contributor-links a {
