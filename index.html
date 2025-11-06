@@ -17,7 +17,7 @@
   <meta property="og:description" content="Research on semantic control and safe robot decision-making. Projects include semantic scene understanding, semantic safety reasoning and decision-making, and safe human-robot interaction for autonomous systems." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://semanticcontrol.com/" />
-  <meta property="og:image" content="https://semanticcontrol.com/assets/images/banner.jpg" />
+  <meta property="og:image" content="https://semanticcontrol.com/assets/images/banner.svg" />
   <meta property="og:site_name" content="Semantic Control for Robotics" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚪️</text></svg>">
 
@@ -38,14 +38,15 @@
 
   <style>
     :root{
-      --bg: #0e0f12;
+      --bg: #1a1a1a;
       --text: #ffffff;
       --muted: #b7c0cc;
       --brand: #cbe9f9;   /* light blue */
       --brand-2: #a7ffb7;
-      --card: #151821;
-      --border: #232736;
+      --card: #262626;
+      --border: #3a3a3a;
       --maxw: 100%;
+      --banner-stroke: #ffffff;  /* white for dark mode */
 
       /* Animation speed controls */
       --draw-duration: 9000ms;  /* slow overall draw (9s) */
@@ -54,13 +55,14 @@
     
     /* Dark mode (manual override) */
     :root[data-theme="dark"]{
-      --bg: #0e0f12;
+      --bg: #1a1a1a;
       --text: #ffffff;
       --muted: #b7c0cc;
       --brand: #87d6ff;   /* light blue */
       --brand-2: #a7ffb7;
-      --card: #151821;
-      --border: #232736;
+      --card: #262626;
+      --border: #3a3a3a;
+      --banner-stroke: #ffffff;  /* white for dark mode */
     }
 
     /* Light mode (default) */
@@ -72,6 +74,7 @@
       --brand-2: #00a86b;
       --card: #f4f7fb;
       --border: #e6ebf2;
+      --banner-stroke: #d3d3d3;  /* light gray for light mode */
     }
     
     /* Auto-detect system preference */
@@ -84,33 +87,30 @@
         --brand-2: #00a86b;
         --card: #f4f7fb;
         --border: #e6ebf2;
+        --banner-stroke: #d3d3d3;  /* light gray for light mode */
       }
     }
 
-    /* Dark mode inversions for banner and thumbnails */
+    /* Dark mode banner - SVG background will use CSS variables */
     :root[data-theme="dark"] .banner {
-      background: #000000 !important;
-      filter: invert(1);
+      background: #1a1a1a;
     }
     
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) .banner {
-        background: #000000 !important;
-        filter: invert(1);
+        background: #1a1a1a;
       }
     }
     
     :root[data-theme="dark"] .banner .overlay-text,
     :root[data-theme="dark"] .banner .overlay-subtitle {
       color: #ffffff !important;
-      filter: invert(1);
     }
     
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) .banner .overlay-text,
       :root:not([data-theme="light"]) .banner .overlay-subtitle {
         color: #ffffff !important;
-        filter: invert(1);
       }
     }
     
@@ -218,17 +218,18 @@
     .banner.scrolled-up {
       transform: translateY(-100%);
     }
-     /* Base image fills banner */
-     .banner .banner-img{
+     /* Background SVG (static, no animation) */
+     .banner .banner-svg-bg{
        position: absolute;
        inset: 0;
        width: 100%;
        height: 100%;
-       object-fit: cover;
+       display: block;
        z-index: 1;
+       pointer-events: none;
      }
      /* Animated SVG overlay */
-     .banner svg{
+     .banner .banner-svg-animated{
        position: absolute;
        inset: 0;
        width: 100%;
@@ -236,6 +237,15 @@
        display: block;
        z-index: 2;
        pointer-events: none; /* allow clicks to pass through */
+     }
+     /* General SVG styling */
+     .banner svg{
+       position: absolute;
+       inset: 0;
+       width: 100%;
+       height: 100%;
+       display: block;
+       pointer-events: none;
      }
      /* Gradient sits above SVG but below text */
      .banner::after {
@@ -447,17 +457,6 @@
       will-change: stroke-dashoffset;
     }
     .draw.inview .svg-draw-stroke { animation-play-state: running; }
-    
-    /* Counter-invert SVG in dark mode (banner has invert filter) */
-    :root[data-theme="dark"] .banner svg {
-      filter: invert(1);
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) .banner svg {
-        filter: invert(1);
-      }
-    }
 
     @keyframes banner-draw { to { stroke-dashoffset: 0; } }
 
@@ -485,10 +484,7 @@
   <main id="home" class="wrap">
     <section class="hero" aria-label="Site banner">
       <div class="banner" role="img" aria-label="Line art banner">
-        <!-- Base image -->
-        <img class="banner-img" src="assets/images/banner.jpg" alt="Semantic Control Banner">
-
-        <!-- SVG injected by JS (traces over image) -->
+        <!-- SVG background and animation injected by JS -->
         <div class="overlay-text">semantic control for robotics</div>
         <div class="overlay-subtitle">perceive and act through robots' lenses</div>
       </div>
@@ -925,7 +921,7 @@
   })();
   </script>
 
-  <!-- Inject and animate banner.svg OVER the JPEG -->
+  <!-- Inject banner.svg twice: once as background, once animated -->
   <script>
   (async function injectBannerSVG(){
     const banner = document.querySelector('.banner');
@@ -936,36 +932,71 @@
       if (!res.ok) throw new Error('Failed to load assets/images/banner.svg');
 
       const svgText = await res.text();
-      const wrap = document.createElement('div');
-      wrap.innerHTML = svgText.trim();
 
-      const svg = wrap.querySelector('svg');
-      if (!svg) throw new Error('No <svg> root in banner.svg');
-
-      svg.classList.add('draw');
-      svg.setAttribute('role','img');
-      svg.setAttribute('aria-label','Decorative line art');
-
-       // Ensure overlay positioning/z-index are correct
-       svg.style.position = 'absolute';
-       svg.style.inset = '0';
-       svg.style.zIndex = '2';
-       svg.style.pointerEvents = 'none';
-
-      // Select ALL stroke-capable elements
-      const allStrokes = svg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
+      // Create a temporary SVG to determine which strokes to animate
+      const tempWrap = document.createElement('div');
+      tempWrap.innerHTML = svgText.trim();
+      const tempSvg = tempWrap.querySelector('svg');
+      if (!tempSvg) throw new Error('No <svg> root in banner.svg');
+      
+      // Select ALL stroke-capable elements to determine selection
+      const allStrokesTemp = tempSvg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
       
       // Filter out elements with data-no-anim
-      const availableStrokes = Array.from(allStrokes).filter(el => !el.hasAttribute('data-no-anim'));
+      const availableStrokes = Array.from(allStrokesTemp).filter(el => !el.hasAttribute('data-no-anim'));
       
       // Randomly select 30% of available strokes
       const totalStrokes = availableStrokes.length;
       const targetCount = Math.floor(totalStrokes * 0.30);
-      const selectedStrokes = availableStrokes
-        .sort(() => Math.random() - 0.5) // Shuffle array
-        .slice(0, targetCount); // Take first 80%
+      const shuffled = availableStrokes.sort(() => Math.random() - 0.5);
+      const selectedIndices = new Set();
+      for (let i = 0; i < targetCount; i++) {
+        // Store the index of selected strokes
+        const index = Array.from(allStrokesTemp).indexOf(shuffled[i]);
+        selectedIndices.add(index);
+      }
 
       console.log(`Total strokes: ${totalStrokes}, Selected for animation: ${targetCount}`);
+
+      // Create background SVG (static, no animation)
+      const bgWrap = document.createElement('div');
+      bgWrap.innerHTML = svgText.trim();
+      const bgSvg = bgWrap.querySelector('svg');
+      if (!bgSvg) throw new Error('No <svg> root in banner.svg');
+      
+      bgSvg.classList.add('banner-svg-bg');
+      bgSvg.setAttribute('role','img');
+      bgSvg.setAttribute('aria-label','Banner background');
+      bgSvg.style.position = 'absolute';
+      bgSvg.style.inset = '0';
+      bgSvg.style.zIndex = '1';
+      bgSvg.style.pointerEvents = 'none';
+      
+      // Show all strokes in background SVG (100% visible) with different color
+      const bgStrokes = bgSvg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
+      bgStrokes.forEach((el) => {
+        // Show all strokes with banner-stroke color (light gray/white, different from animated brand color)
+        el.style.stroke = 'var(--banner-stroke)';
+        el.style.fill = 'none';
+      });
+
+      // Create animated SVG (overlay)
+      const animWrap = document.createElement('div');
+      animWrap.innerHTML = svgText.trim();
+      const animSvg = animWrap.querySelector('svg');
+      if (!animSvg) throw new Error('No <svg> root in banner.svg');
+
+      animSvg.classList.add('draw', 'banner-svg-animated');
+      animSvg.setAttribute('role','img');
+      animSvg.setAttribute('aria-label','Animated line art');
+      animSvg.style.position = 'absolute';
+      animSvg.style.inset = '0';
+      animSvg.style.zIndex = '2';
+      animSvg.style.pointerEvents = 'none';
+
+      // Select strokes for animation (only the selected ones)
+      const allStrokes = animSvg.querySelectorAll('path, line, polyline, rect, circle, ellipse, polygon');
+      const selectedStrokes = Array.from(allStrokes).filter((el, index) => selectedIndices.has(index));
 
       // Read CSS var for stagger (fallback 160ms)
       const raw = getComputedStyle(document.documentElement)
@@ -983,28 +1014,45 @@
 
         // ensure it's styled/animated
         el.classList.add('svg-draw-stroke');
+        
+        // Set stroke color explicitly for animated strokes
+        el.style.stroke = 'var(--brand)';
+        el.style.fill = 'none';
 
         // Slow cascade; comment out next line to draw all at once
         el.style.animationDelay = (i * step) + unit;
       });
+      
+      // Hide all other strokes in the animated SVG that aren't being animated
+      const nonAnimatedStrokes = Array.from(allStrokes).filter(el => !selectedStrokes.includes(el));
+      nonAnimatedStrokes.forEach(el => {
+        el.style.stroke = 'none';
+        el.style.display = 'none';
+      });
 
-      // Insert SVG above the image but below text (see z-indexes in CSS)
-      banner.prepend(svg);
+      // Insert background SVG first, then animated SVG
+      banner.prepend(bgSvg);
+      banner.prepend(animSvg);
 
       // Start animation when in view (runs once)
       const io = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
-            svg.classList.add('inview');
+            animSvg.classList.add('inview');
             io.unobserve(e.target);
           }
         });
       }, { threshold: 0.25 });
-      io.observe(svg);
+      io.observe(animSvg);
 
     } catch(err){
       console.error(err);
-      // If SVG fails, we still keep the JPEG visible
+      // If SVG fails, show error message
+      banner.style.backgroundColor = 'var(--bg)';
+      banner.style.display = 'flex';
+      banner.style.alignItems = 'center';
+      banner.style.justifyContent = 'center';
+      banner.textContent = 'Failed to load banner';
     }
   })();
   </script>
