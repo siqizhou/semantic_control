@@ -1,7 +1,7 @@
 {
     "title": "SwarmGPT: Combining Large Language Models with Safe Motion Planning for Drone Swarm Choreography",
     "abstract": "Drone swarm performances---synchronized, expressive aerial displays set to music---have emerged as a captivating application of modern robotics. Yet designing smooth, safe choreographies remains a complex task requiring expert knowledge. We present SwarmGPT, a language-based choreographer that leverages the reasoning power of large language models (LLMs) to streamline drone performance design. The LLM is augmented by a safety filter that ensures deployability by making minimal corrections when safety or feasibility constraints are violated. By decoupling high-level choreographic design from low-level motion planning, our system enables non-experts to iteratively refine choreographies using natural language without worrying about collisions or actuator limits.  We validate our approach through simulations with swarms up to 200 drones and real-world experiments with up to 20 drones performing choreographies to diverse types of songs, demonstrating scalable, synchronized, and safe performances. Beyond entertainment, this work offers a blueprint for integrating foundation models into safety-critical swarm robotics applications.",
-    "venue": "RA-L (in press)",
+    "venue": "RA-L",
     "year": 2025,
     "authors": ["Martin Schuck", "Dinushka Orrin Dahanaggamaarachchi", "Ben Sprenger", "Vedant Vyas", "Siqi Zhou", "Angela P. Schoellig"],
     "tags": ["Flying Robot", "Swarm", "Semantic Interaction"],
