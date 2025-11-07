@@ -584,6 +584,14 @@
 
     .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; }
     .site-footer a{ color: var(--brand); }
+    
+    /* Smaller footer text on mobile landscape */
+    @media (max-width: 920px) and (orientation: landscape) {
+      .site-footer {
+        font-size: 0.75rem;
+        padding: 1.5rem 0;
+      }
+    }
 
     /* Thumbnail container */
     .thumb-container {

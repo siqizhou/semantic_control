@@ -183,6 +183,22 @@
         max-width: 400px;
       }
     }
+    
+    /* Two columns in landscape on mobile devices */
+    @media (max-width: 920px) and (orientation: landscape) {
+      .contributors-grid {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      .contributors-column {
+        width: calc(50% - 1rem);
+        max-width: none;
+        min-width: 0;
+        align-self: flex-start;
+      }
+    }
 
     .contributor-card{
       background: var(--card);
@@ -296,6 +312,14 @@
 
     .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; margin-top: 4rem; }
     .site-footer a{ color: var(--brand); }
+    
+    /* Smaller footer text on mobile landscape */
+    @media (max-width: 920px) and (orientation: landscape) {
+      .site-footer {
+        font-size: 0.75rem;
+        padding: 1.5rem 0;
+      }
+    }
 
     @media (max-width: 768px){
       .contributors-grid{ grid-template-columns: 1fr; gap: 1.5rem; }
@@ -681,12 +705,18 @@
 
     function getNumColumns() {
       const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const isLandscape = screenWidth > screenHeight;
+      
       // Account for 3% padding on each side (6% total)
       const availableWidth = screenWidth * 0.94;
       const columnWidth = 300;
       const gap = 32; // 2rem ≈ 32px
       
-      if (screenWidth <= 920) return 1;      // Mobile: single column
+      // Mobile: single column in portrait, two columns in landscape
+      if (screenWidth <= 920) {
+        return isLandscape ? 2 : 1;
+      }
       
       // Calculate how many columns can fit
       let cols = 2;
