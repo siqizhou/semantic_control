@@ -199,6 +199,22 @@
         align-self: flex-start;
       }
     }
+    
+    /* Two columns for tablets in portrait mode */
+    @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+      .contributors-grid {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      .contributors-column {
+        width: calc(50% - 1rem);
+        max-width: none;
+        min-width: 0;
+        align-self: flex-start;
+      }
+    }
 
     .contributor-card{
       background: var(--card);
@@ -707,6 +723,7 @@
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
       const isLandscape = screenWidth > screenHeight;
+      const isTablet = screenWidth >= 768 && screenWidth <= 1024;
       
       // Account for 3% padding on each side (6% total)
       const availableWidth = screenWidth * 0.94;
@@ -716,6 +733,11 @@
       // Mobile: single column in portrait, two columns in landscape
       if (screenWidth <= 920) {
         return isLandscape ? 2 : 1;
+      }
+      
+      // Tablet: two columns in portrait mode
+      if (isTablet && !isLandscape) {
+        return 2;
       }
       
       // Calculate how many columns can fit
