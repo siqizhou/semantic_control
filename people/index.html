@@ -730,17 +730,17 @@
       const columnWidth = 300;
       const gap = 32; // 2rem ≈ 32px
       
-      // Mobile: single column in portrait, two columns in landscape
-      if (screenWidth <= 920) {
-        return isLandscape ? 2 : 1;
-      }
-      
-      // Tablet: two columns in portrait mode
+      // Tablet: two columns in portrait mode (check this first before mobile)
       if (isTablet && !isLandscape) {
         return 2;
       }
       
-      // Calculate how many columns can fit
+      // Mobile (phones, not tablets): single column in portrait, two columns in landscape
+      if (screenWidth < 768) {
+        return isLandscape ? 2 : 1;
+      }
+      
+      // Calculate how many columns can fit for larger screens
       let cols = 2;
       if (availableWidth >= columnWidth * 2 + gap * 1) cols = 2;
       if (availableWidth >= columnWidth * 3 + gap * 2) cols = 3;
@@ -792,3 +792,4 @@
   </script>
 </body>
 </html>
+
