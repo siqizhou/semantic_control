@@ -220,10 +220,10 @@
       transition: transform 0.3s ease-out;
     }
     
-    /* Responsive banner for smaller screens - different aspect ratio and crop */
-    @media (max-width: 768px) {
+    /* Responsive banner for portrait orientation - different aspect ratio and crop */
+    @media (orientation: portrait) and (max-aspect-ratio: 3/4) {
       .banner {
-        aspect-ratio: 3 / 4; /* Taller portrait aspect ratio for tablets */
+        aspect-ratio: 3 / 4; /* Taller portrait aspect ratio for portrait tablets */
         margin: 0 auto; /* Ensure banner is centered */
       }
       
@@ -253,9 +253,9 @@
       }
     }
     
-    @media (max-width: 480px) {
+    @media (orientation: portrait) and (max-aspect-ratio: 2/3) {
       .banner {
-        aspect-ratio: 2 / 3; /* Taller portrait aspect ratio for phones */
+        aspect-ratio: 2 / 3; /* Even taller portrait aspect ratio for portrait phones */
         margin: 0 auto; /* Ensure banner is centered */
       }
       
