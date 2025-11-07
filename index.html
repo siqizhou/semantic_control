@@ -172,20 +172,16 @@
       padding: 0 3%;
     }
     .nav{ display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; width: 100%; }
-    .brand{ 
-      font-weight: 200; 
-      letter-spacing: .5px; 
-      font-family: var(--chosen-font), serif; 
-      text-decoration: none; 
-      color: var(--text);
-      white-space: nowrap;
-      flex-shrink: 1;
-      min-width: 0;
-    }
+    .brand{ font-weight: 200; letter-spacing: .5px; font-family: var(--chosen-font), serif; text-decoration: none; color: var(--text); }
     .brand .dot{ color: var(--brand); font-size: 1.1em; }
     .links{ display: flex; gap: 1rem; font-family: var(--chosen-font), serif; font-weight: 200; align-items: center; }
-    .links a{ color: var(--text); text-decoration: none; transition: color .2s; opacity: .9; }
+
+    .links a{
+      color: var(--text); text-decoration: none; transition: color .2s;
+      position: relative;
+    }
     .links a:hover{ color: var(--brand); }
+    .links a.active{ color: var(--brand); }
     
     .theme-toggle{
       background: var(--card);
@@ -308,30 +304,6 @@
       margin: 0;
       padding: 0 1rem;
       line-height: 1.2;
-    }
-    
-    /* Responsive navigation styles */
-    @media (max-width: 768px) {
-      .brand {
-        font-size: clamp(0.75rem, 2.5vw, 0.95rem);
-      }
-      .nav {
-        gap: 0.5rem;
-      }
-      .links {
-        gap: 0.5rem;
-        flex-shrink: 0;
-      }
-      .links a {
-        font-size: 0.85rem;
-      }
-      .theme-toggle {
-        padding: 0.35rem 0.7rem;
-        font-size: 0.8rem;
-      }
-      .theme-toggle #theme-text {
-        display: none;
-      }
     }
     
     /* Responsive font sizes for banner text */
