@@ -553,6 +553,20 @@
       }
     }
     
+    /* Two columns in landscape on mobile devices */
+    @media (max-width: 920px) and (orientation: landscape) {
+      .grid {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .grid-column {
+        width: calc(50% - 0.6rem);
+        max-width: none;
+        min-width: 0;
+      }
+    }
+    
     @media (min-width: 921px) and (max-width: 1200px) {
       .grid-column {
         width: 280px;
@@ -923,12 +937,18 @@
       // Create columns based on screen width
       function getNumColumns() {
         const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const isLandscape = screenWidth > screenHeight;
+        
         // Account for 3% padding on each side (6% total)
         const availableWidth = screenWidth * 0.94;
         const columnWidth = 280;
         const gap = 19.2; // 1.2rem ≈ 19.2px
         
-        if (screenWidth <= 920) return 1;      // Mobile: single column
+        // Mobile: single column in portrait, two columns in landscape
+        if (screenWidth <= 920) {
+          return isLandscape ? 2 : 1;
+        }
         
         // Calculate how many columns can fit
         let cols = 2;
