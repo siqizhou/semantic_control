@@ -220,6 +220,67 @@
       transition: transform 0.3s ease-out;
     }
     
+    /* Responsive banner for smaller screens - different aspect ratio and crop */
+    @media (max-width: 768px) {
+      .banner {
+        aspect-ratio: 3 / 4; /* Taller portrait aspect ratio for tablets */
+        margin: 0 auto; /* Ensure banner is centered */
+      }
+      
+      /* Scale and position SVG to show the converging point - scale up significantly to fill more space */
+      .banner .banner-svg-bg,
+      .banner .banner-svg-animated {
+        width: 100% !important;
+        height: 100% !important;
+        /* Scale up significantly to zoom in and fill more of the screen */
+        transform: scale(2.2) translate(-8%, 0) !important;
+        transform-origin: center center;
+      }
+      
+      /* Ensure animated SVG stays visible and on top, and animation works */
+      .banner .banner-svg-animated {
+        z-index: 2 !important;
+        display: block !important;
+      }
+      
+      /* Ensure animation still works on child elements */
+      .banner .banner-svg-animated .svg-draw-stroke {
+        animation: banner-draw var(--draw-duration) cubic-bezier(.33,0,.17,1) forwards !important;
+      }
+      
+      .banner .banner-svg-animated.inview .svg-draw-stroke {
+        animation-play-state: running !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .banner {
+        aspect-ratio: 2 / 3; /* Taller portrait aspect ratio for phones */
+        margin: 0 auto; /* Ensure banner is centered */
+      }
+      
+      .banner .banner-svg-bg,
+      .banner .banner-svg-animated {
+        /* Even more aggressive scaling to fill the screen */
+        transform: scale(2.5) translate(-10%, 0) !important;
+      }
+      
+      /* Ensure animated SVG stays visible and on top */
+      .banner .banner-svg-animated {
+        z-index: 2 !important;
+        display: block !important;
+      }
+      
+      /* Ensure animation still works on child elements */
+      .banner .banner-svg-animated .svg-draw-stroke {
+        animation: banner-draw var(--draw-duration) cubic-bezier(.33,0,.17,1) forwards !important;
+      }
+      
+      .banner .banner-svg-animated.inview .svg-draw-stroke {
+        animation-play-state: running !important;
+      }
+    }
+    
     .banner.scrolled-up {
       transform: translateY(-100%);
     }
