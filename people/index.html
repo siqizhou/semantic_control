@@ -328,6 +328,9 @@
 
     .site-footer{ padding: 2.5rem 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .9rem; font-style: italic; font-family: var(--chosen-font), serif; margin-top: 4rem; }
     .site-footer a{ color: var(--brand); }
+    .footer-logos{ display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .footer-logos img{ height: 60px; width: auto; opacity: 0.8; transition: opacity 0.2s; }
+    .footer-logos img:hover{ opacity: 1; }
     
     /* Smaller footer text on mobile landscape */
     @media (max-width: 920px) and (orientation: landscape) {
@@ -377,6 +380,10 @@
   <footer class="site-footer">
     <div class="wrap">
       <p>© <span id="year"></span> Semantic Control for Robotics. The projects are supported by the European Union's Horizon Europe research and innovation programme under the <a href="https://cordis.europa.eu/project/id/101155035">Marie Skłodowska-Curie grant agreement No. 101155035</a>, by the <a href="https://www.robotics-institute-germany.de/">Robotics Institute Germany</a> under BMBF grant 16ME0997K, and by the Humboldt Professorship for Robotics and Artificial Intelligence.</p>
+      <div class="footer-logos">
+        <img src="../assets/logos/tum_logo.png" alt="TUM Logo">
+        <img src="../assets/logos/sfu_logo.png" alt="SFU Logo">
+      </div>
     </div>
   </footer>
 
